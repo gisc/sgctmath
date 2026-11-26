@@ -1,4 +1,4 @@
-// Unit 8 · Make a Supposition (t21, t22, S3) — original content, Singapore context.
+// Unit 8 · Make a Supposition (t21, t22) and the Maths Story S3 — original content, Singapore context.
 import * as A from '../art.js';
 const { svg, kid, leo } = A;
 const INK = A.ink, S = A.stroke;
@@ -268,8 +268,45 @@ const t22 = {
   adult: 'Links to school work: P4 multiples and common multiples, fractions of a quantity, and the four operations. Choosing a convenient number is a standard Singapore heuristic ("make a supposition") that pupils use later in P5–P6 fraction, ratio and percentage problems. Work-rate and meeting problems are not in the primary syllabus, so this topic is <b>enrichment</b>. Note that question 1 needs [[f:1/3]] + [[f:1/4]], which P4 pupils can add using a common denominator; supposing $12 lets them solve it with whole numbers instead. Common mistakes: adding the times (3 h + 6 h) instead of the amounts done per hour; thinking "up by [[f:1/5]] then down by [[f:1/5]]" returns to the same price. Tip: ask your child to solve the problem twice with two different supposed numbers. Getting the same answer is a powerful check.',
 };
 
-/* ---------- S3 helpers: coordinate grids ---------- */
-// W×H grid, first quadrant. pts: [{x, y, t, c, at:'r'|'l'|'t'|'b', mark:'dot'|'x'|'star'}]
+/* ---------- S3 helpers: HDB block faces and grid maps ---------- */
+const pad2 = n => String(n).padStart(2, '0');
+// The face of a pretend HDB block: floors fl[0]..fl[1] above a void deck (level 1), units un[0]..un[1] from left to right.
+// hi: [{f, u, c, lc}] highlighted flats (fill c, floor/unit labels in colour lc). zone: {f0, f1, u0, u1, c, flag} a shaded rectangle of flats.
+function blockFace({ x = 0, y = 0, fl = [2, 8], un = [9, 13], cw = 32, ch = 19, vd = 22, hi = [], zone = null, fs = 14, body = '#ffe3b3', caps = true } = {}) {
+  const nF = fl[1] - fl[0] + 1, nU = un[1] - un[0] + 1, W = nU * cw, Hb = nF * ch;
+  const cx = u => x + (u - un[0]) * cw, cy = f => y + (fl[1] - f) * ch;
+  const inZone = (f, u) => zone && f >= zone.f0 && f <= zone.f1 && u >= zone.u0 && u <= zone.u1;
+  let g = `<rect x="${x - 6}" y="${y - 10}" width="${W + 12}" height="12" rx="4" fill="#fff" ${S}/>
+    <rect x="${x}" y="${y}" width="${W}" height="${Hb}" fill="${body}"/>`;
+  for (let f = fl[0]; f <= fl[1]; f++) for (let u = un[0]; u <= un[1]; u++) {
+    const X0 = cx(u), Y0 = cy(f), h = hi.find(p => p.f === f && p.u === u), z = inZone(f, u);
+    if (h || z) g += `<rect x="${X0 + 1.5}" y="${Y0 + 1.5}" width="${cw - 3}" height="${ch - 3}" rx="3" fill="${h ? h.c : zone.c}"/>`;
+    if (z && zone.flag) g += `<rect x="${X0 + 4}" y="${Y0 + 3.5}" width="${cw * .36}" height="${(ch - 8) / 2}" fill="#e1484b"/><rect x="${X0 + 4}" y="${Y0 + 3.5 + (ch - 8) / 2}" width="${cw * .36}" height="${(ch - 8) / 2}" fill="#fff"/><rect x="${X0 + 4}" y="${Y0 + 3.5}" width="${cw * .36}" height="${ch - 8}" fill="none" stroke="${INK}" stroke-width="1"/>`;
+    else g += `<rect x="${X0 + 4}" y="${Y0 + 4}" width="${cw * .36}" height="${ch - 9}" rx="1.5" fill="${h ? '#fff' : '#cfe9ff'}"/>`;
+    g += `<rect x="${X0 + cw * .6}" y="${Y0 + 3}" width="${cw * .26}" height="${ch - 3}" rx="1.5" fill="#a86f3f"/>`;
+  }
+  for (let f = fl[0]; f < fl[1]; f++) g += `<line x1="${x}" y1="${cy(f)}" x2="${x + W}" y2="${cy(f)}" stroke="#c9a25e" stroke-width="2"/>`;
+  for (let u = un[0] + 1; u <= un[1]; u++) g += `<line x1="${cx(u)}" y1="${y}" x2="${cx(u)}" y2="${y + Hb}" stroke="#d9b77a" stroke-width="1.4"/>`;
+  if (zone) g += `<rect x="${cx(zone.u0) - 2}" y="${cy(zone.f1) - 2}" width="${(zone.u1 - zone.u0 + 1) * cw + 4}" height="${(zone.f1 - zone.f0 + 1) * ch + 4}" rx="4" fill="none" stroke="#7b61ff" stroke-width="2.6" stroke-dasharray="7 4"/>`;
+  for (const p of hi) g += `<rect x="${cx(p.u) + 1}" y="${cy(p.f) + 1}" width="${cw - 2}" height="${ch - 2}" rx="3" fill="none" stroke="${p.lc}" stroke-width="3"/>`;
+  g += `<rect x="${x}" y="${y}" width="${W}" height="${Hb}" fill="none" ${S}/>`;
+  // void deck with pillars
+  g += `<rect x="${x}" y="${y + Hb}" width="${W}" height="${vd}" fill="#9aa7c2" ${S}/>`;
+  for (let i = 0; i <= nU; i += 1) { const px = Math.min(Math.max(x + i * cw - 4, x), x + W - 8); g += `<rect x="${px}" y="${y + Hb}" width="8" height="${vd}" fill="#f4f6fb" ${S} stroke-width="2"/>`; }
+  // labels
+  const lab = (tx, ty, t, anc, col) => {
+    const w = fs * 1.4;
+    const bx = anc === 'end' ? tx - w + 2 : tx - w / 2;
+    return `${col ? `<rect x="${bx - 3}" y="${ty - fs + 1}" width="${w + 4}" height="${fs + 5}" rx="7" fill="${col}" opacity=".18"/>` : ''}<text x="${tx}" y="${ty}" text-anchor="${anc}" ${NF} font-size="${fs}" fill="${col || INK}">${t}</text>`;
+  };
+  for (let f = fl[0]; f <= fl[1]; f++) { const h = hi.find(p => p.f === f); g += lab(x - 8, cy(f) + ch / 2 + fs * .36, pad2(f), 'end', h && h.lc); }
+  for (let u = un[0]; u <= un[1]; u++) { const h = hi.find(p => p.u === u); g += lab(cx(u) + cw / 2, y + Hb + vd + fs + 6, pad2(u), 'middle', h && h.lc); }
+  if (caps) g += `<text x="${x - 8}" y="${y - 14}" text-anchor="end" ${NF} font-size="${fs - 1}" fill="#5d6b88">floor</text>
+    <text x="${x - 8}" y="${y + Hb + vd + fs + 6}" text-anchor="end" ${NF} font-size="${fs - 1}" fill="#5d6b88">unit</text>`;
+  return g;
+}
+
+// W×H grid, first quadrant. pts: [{x, y, t, c, at:'r'|'l'|'t'|'b', mark:'dot'|'x'}]
 function grid(W, Hh, { u = 38, pts = [], rects = [], path = null, guides = [], label = 'A coordinate grid', maxw, bg = '#fff', extra = '' } = {}) {
   const L = 38, T = 28, R = 34, B = 34;
   const X = i => L + i * u, Y = j => T + (Hh - j) * u;
@@ -293,7 +330,6 @@ function grid(W, Hh, { u = 38, pts = [], rects = [], path = null, guides = [], l
   for (const p of pts) {
     const x = X(p.x), y = Y(p.y), c = p.c || '#ff6b5b';
     if (p.mark === 'x') g += `<path d="M${x - 8} ${y - 8} l16 16 M${x + 8} ${y - 8} l-16 16" stroke="#d6453a" stroke-width="5" stroke-linecap="round"/>`;
-    else if (p.mark === 'fly') g += `<ellipse cx="${x - 6}" cy="${y - 7}" rx="7" ry="4.5" transform="rotate(-30 ${x - 6} ${y - 7})" fill="#dff3ff" stroke="${INK}" stroke-width="1.6"/><ellipse cx="${x + 6}" cy="${y - 7}" rx="7" ry="4.5" transform="rotate(30 ${x + 6} ${y - 7})" fill="#dff3ff" stroke="${INK}" stroke-width="1.6"/><ellipse cx="${x}" cy="${y}" rx="5" ry="7" fill="#3b3f58"/><circle cx="${x}" cy="${y - 7}" r="3.5" fill="#3b3f58"/>`;
     else g += `<circle cx="${x}" cy="${y}" r="7" fill="${c}" ${S} stroke-width="2.4"/>`;
     if (p.t) {
       const at = p.at || 'r', fs = p.fs || 15;
@@ -308,92 +344,109 @@ const ZOO = [{ x: 2, y: 5, t: 'Orangutans', c: '#f2a516' }, { x: 3, y: 6, t: 'Ti
 const zooMap = () => grid(8, 6, { pts: ZOO, bg: '#f2fbef', label: 'Zoo map: Orangutans (2, 5), Tigers (3, 6), Elephants (6, 3), Giraffes (5, 1), Kiosk (1, 2)', maxw: 420 });
 const SENTOSA = [{ x: 1, y: 1, t: 'Beach Station', c: '#7b61ff' }, { x: 1, y: 6, t: 'Fort Siloso', c: '#a86f3f' }, { x: 4, y: 4, t: 'Luge', c: '#ff6b5b', at: 't' }, { x: 6, y: 6, t: 'Aquarium', c: '#4aa8ff' }, { x: 5, y: 1, t: 'Palawan Beach', c: '#ffc94a', at: 'b' }, { x: 8, y: 2, t: 'Tanjong Beach', c: '#3dbb6b', at: 'l' }];
 const sentosaMap = (opts = {}) => grid(9, 7, { u: 38, pts: SENTOSA, bg: '#eef9ff', label: 'Sentosa grid map: Beach Station (1, 1), Fort Siloso (1, 6), Luge (4, 4), Aquarium (6, 6), Palawan Beach (5, 1), Tanjong Beach (8, 2)', maxw: 460, ...opts });
+// Our estate map in the explore: Blk 123 (1, 1), playground (4, 3), hawker centre (3, 4)
+const ESTATE = [{ x: 1, y: 1, t: 'Blk 123', c: '#ffc94a', at: 't' }, { x: 4, y: 3, t: 'Playground', c: '#ff6b5b' }, { x: 3, y: 4, t: 'Hawker centre', c: '#4aa8ff', at: 't' }];
+const estateMap = (opts = {}) => grid(6, 5, { pts: ESTATE, bg: '#f2fbef', label: 'Estate map: Blk 123 (1, 1), playground (4, 3), hawker centre (3, 4)', maxw: 320, ...opts });
 
-function descartesScene() {
-  const rene = { name: 'René', skin: '#f3d2b5', hair: 'curly', hairC: '#5a3a22', shirt: '#2f4a7a', bottom: '#2f4a7a' };
-  let ceil = '';
-  for (let i = 0; i <= 7; i++) ceil += `<line x1="${30 + i * 40}" y1="20" x2="${30 + i * 40}" y2="120" stroke="#d8c7a6" stroke-width="2"/>`;
-  for (let j = 0; j <= 4; j++) ceil += `<line x1="30" y1="${20 + j * 25}" x2="310" y2="${20 + j * 25}" stroke="#d8c7a6" stroke-width="2"/>`;
-  return svg('0 0 340 300', `<rect width="340" height="300" rx="20" fill="#f6eedd"/>
-    <rect x="30" y="20" width="280" height="100" fill="#fbf6ea" stroke="#c9b58e" stroke-width="3"/>${ceil}
-    <path d="M30 120 V20 H310" fill="none" stroke="#d6453a" stroke-width="4"/>
-    <path d="M110 120 V70 H30" fill="none" stroke="#d6453a" stroke-width="2.5" stroke-dasharray="6 5"/>
-    <g transform="translate(110 70)"><ellipse cx="-6" cy="-7" rx="7" ry="4.5" transform="rotate(-30 -6 -7)" fill="#dff3ff" stroke="${INK}" stroke-width="1.6"/><ellipse cx="6" cy="-7" rx="7" ry="4.5" transform="rotate(30 6 -7)" fill="#dff3ff" stroke="${INK}" stroke-width="1.6"/><ellipse cx="0" cy="0" rx="5" ry="7" fill="#3b3f58"/><circle cx="0" cy="-7" r="3.5" fill="#3b3f58"/></g>
-    <text x="250" y="148" text-anchor="middle" ${HF} font-size="16" fill="#7a5b2e">the ceiling</text>
-    <rect x="34" y="150" width="20" height="120" rx="6" fill="#a86f3f" ${S}/>
-    <rect x="62" y="196" width="58" height="30" rx="12" fill="#fff" ${S} stroke-width="2.4"/>
-    ${kid(rene, { x: 118, y: 192, s: .72, pose: 'think', mood: 'think' })}
-    <path d="M110 200 q8 -5 16 0" fill="none" stroke="#5a3a22" stroke-width="3.5" stroke-linecap="round"/>
-    <path d="M54 232 h250 v46 h-250z" fill="#a86f3f" ${S}/>
-    <path d="M60 236 q40 -16 92 -12 q70 -6 150 4 v30 h-242z" fill="#3dbb6b" ${S}/>
-    <path d="M150 238 q60 10 150 2" fill="none" stroke="#2c9654" stroke-width="3"/>
-    <rect x="288" y="240" width="16" height="40" rx="5" fill="#a86f3f" ${S}/>
-    <text x="230" y="208" text-anchor="middle" ${HF} font-size="30" fill="#7b61ff">?</text>`, 'Young René Descartes in bed, watching a fly on the ceiling tiles');
+const COUSIN = { name: 'Kavya', skin: '#9c6a4c', hair: 'ponytail', hairC: '#1d1716', shirt: '#7b61ff', bottom: '#ff8fb1' };
+// Explore scene: Arjun's cousin Kavya on Level 12, outside #12-05 instead of #05-12
+function corridorScene() {
+  const bars = [0, 1, 2, 3, 4, 5, 6].map(i => `<line x1="${50 + i * 11}" y1="112" x2="${50 + i * 11}" y2="240" stroke="#5d6b88" stroke-width="3"/>`).join('');
+  return svg('0 0 340 300', `<rect width="340" height="300" rx="20" fill="#fbf1de"/>
+    <path d="M0 20 q0 -20 20 -20 h300 q20 0 20 20 v18 h-340z" fill="#e6d6b8"/>
+    <rect x="150" y="14" width="40" height="10" rx="4" fill="#fff" ${S} stroke-width="2"/>
+    <path d="M0 240 h340 v40 q0 20 -20 20 h-300 q-20 0 -20 -20z" fill="#d9dee8"/>
+    <path d="M0 240 h340" stroke="${INK}" stroke-width="3"/>
+    ${[60, 140, 220, 300].map(x => `<path d="M${x} 240 l-14 60" stroke="#c3cad8" stroke-width="2"/>`).join('')}
+    <rect x="40" y="104" width="86" height="136" rx="4" fill="#a86f3f" ${S}/>
+    <circle cx="112" cy="176" r="4" fill="#ffc94a" ${S} stroke-width="1.6"/>
+    ${bars}<rect x="44" y="108" width="78" height="132" fill="none" stroke="#5d6b88" stroke-width="3"/><path d="M44 150 h78 M44 196 h78" stroke="#5d6b88" stroke-width="3"/>
+    <rect x="48" y="66" width="70" height="28" rx="6" fill="#fff" ${S}/>
+    <text x="83" y="86" text-anchor="middle" ${HF} font-size="18" fill="${INK}">#12-05</text>
+    <rect x="252" y="72" width="64" height="58" rx="10" fill="#0f9d94" ${S}/>
+    <text x="284" y="89" text-anchor="middle" ${NF} font-size="12" fill="#fff">LEVEL</text>
+    <text x="284" y="122" text-anchor="middle" ${HF} font-size="32" fill="#fff">12</text>
+    <rect x="248" y="150" width="72" height="90" rx="4" fill="#c9cfdc" ${S}/><path d="M284 152 v88" stroke="${INK}" stroke-width="2.4"/>
+    <text x="284" y="144" text-anchor="middle" ${NF} font-size="11" fill="#5d6b88">LIFT</text>
+    ${kid(COUSIN, { x: 184, y: 132, s: .8, pose: 'think', mood: 'think', flip: true })}
+    <rect x="206" y="214" width="30" height="24" rx="3" fill="#ff6b5b" ${S} stroke-width="2.4"/><path d="M221 214 v24 M206 224 h30" stroke="#ffc94a" stroke-width="3.5"/>
+    <g>
+      <path d="M106 10 h160 q12 0 12 12 v30 q0 12 -12 12 h-160 q-12 0 -12 -12 v-30 q0 -12 12 -12z" fill="#fff" ${S}/>
+      <circle cx="176" cy="76" r="5" fill="#fff" ${S} stroke-width="2"/><circle cx="182" cy="88" r="3" fill="#fff" ${S} stroke-width="2"/>
+      <text x="186" y="33" text-anchor="middle" ${NF} font-size="13" fill="${INK}">Arjun said 5 and 12…</text>
+      <text x="186" y="54" text-anchor="middle" ${HF} font-size="15" fill="#7b61ff">so this must be it!</text>
+    </g>`, 'Arjun\'s cousin Kavya outside flat #12-05 on Level 12, holding a Deepavali gift and looking puzzled');
 }
 
-/* ===================== Maths Story: Descartes and the Grid ===================== */
+/* ===================== Maths Story: Two Numbers, One Place ===================== */
+const TEAL = { c: '#8fdcd3', lc: '#0f7a73' }, CORAL = { c: '#ffb0a6', lc: '#d6453a' };
 const S3 = {
   id: 'S3',
-  title: 'Maths Story: Descartes and the Grid',
-  intro: 'How can you tell a friend <i>exactly</i> where something is? About 400 years ago, a thinker lying in bed came up with a brilliant answer: use <b>two numbers</b>.',
-  skills: ['History of maths', 'Grids and coordinates', 'Area on a grid'],
-  art: () => svg('0 0 360 220', `<rect width="360" height="220" rx="20" fill="#bfe3ff"/>
-    <path d="M18 22 q80 -8 160 2 q90 -10 164 0 l-4 176 q-80 10 -160 0 q-80 8 -158 -2z" fill="#fbecc4" ${S}/>
-    <path d="M60 120 q20 -50 90 -46 q40 -26 100 -6 q50 6 54 46 q-10 40 -70 42 q-50 22 -110 6 q-70 -4 -64 -42z" fill="#a8e0a0" ${S} stroke-width="2.6"/>
-    ${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<line x1="${44 + i * 40}" y1="34" x2="${44 + i * 40}" y2="186" stroke="#c9a96b" stroke-width="1.4"/>`).join('')}
-    ${[0, 1, 2, 3, 4].map(j => `<line x1="34" y1="${46 + j * 34}" x2="330" y2="${46 + j * 34}" stroke="#c9a96b" stroke-width="1.4"/>`).join('')}
-    <path d="M84 148 C120 150 140 110 164 114 S220 140 244 80" fill="none" stroke="#d6453a" stroke-width="3.5" stroke-dasharray="8 7" stroke-linecap="round"/>
-    <path d="M234 70 l20 20 M254 70 l-20 20" stroke="#d6453a" stroke-width="6" stroke-linecap="round"/>
-    ${A.tree(118, 128, .32)}${A.tree(210, 158, .28)}
-    <g transform="translate(300 66)"><circle r="20" fill="#fff" ${S} stroke-width="2.4"/><path d="M0 -15 l5 15 l-5 15 l-5 -15z" fill="#ff6b5b" ${S} stroke-width="1.6"/><text y="-24" text-anchor="middle" ${HF} font-size="13" fill="${INK}">N</text></g>
-    <rect x="96" y="190" width="168" height="26" rx="10" fill="#fff" ${S} stroke-width="2.4"/>
-    <text x="180" y="209" text-anchor="middle" ${HF} font-size="16" fill="${INK}">X marks the spot!</text>`, 'A treasure map of an island drawn on a grid, with a red X'),
+  title: 'Two Numbers, One Place',
+  intro: 'Arjun lives at <b>Blk 123 #05-12</b>. His cousin went to <b>#12-05</b> instead and knocked on a stranger\'s door! Find out why one place needs <b>two numbers</b>, and why their <b>order</b> matters so much.',
+  skills: ['Order matters', 'Grids and coordinates', 'Area on a grid'],
+  art: () => svg('0 0 360 220', `<rect width="360" height="220" rx="20" fill="#dff1ff"/>
+    ${A.cloud(250, 70, .55)}${A.cloud(150, 2, .45)}
+    <path d="M0 196 h360 v4 q0 20 -20 20 h-320 q-20 0 -20 -20z" fill="#9edcaa"/>
+    ${blockFace({ x: 52, y: 34, fl: [2, 8], un: [9, 13], cw: 32, ch: 19, vd: 20, body: '#cdeee0', hi: [{ f: 5, u: 12, ...CORAL }], fs: 13, caps: false })}
+    <rect x="220" y="12" width="132" height="34" rx="12" fill="#fff" ${S}/>
+    <text x="286" y="35" text-anchor="middle" ${HF} font-size="16" fill="#d6453a">Blk 123 #05-12</text>
+    <path d="M240 48 q-12 32 -52 46" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+    <path d="M240 48 q-12 32 -52 46" fill="none" stroke="#d6453a" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M184 96 l14 -1 l-6 -10z" fill="#d6453a" stroke="#d6453a" stroke-width="2" stroke-linejoin="round"/>
+    <text x="30" y="24" text-anchor="middle" ${NF} font-size="12" fill="#5d6b88">floor</text><text x="28" y="206" text-anchor="middle" ${NF} font-size="12" fill="#5d6b88">unit</text>
+    ${leo({ x: 300, y: 122, s: .58, pose: 'wave' })}`, 'The face of HDB Blk 123 with numbered floors and units; flat #05-12 (floor 5, unit 12) is highlighted'),
   explore: {
-    title: 'The Story: A Fly on the Ceiling',
-    setup: 'About 400 years ago in France lived a thinker called <b>René Descartes</b> (say "ruh-NAY day-KART"). He was a philosopher, a scientist and a mathematician.',
-    art: descartesScene,
+    title: 'The Story: The Wrong Door',
+    setup: 'On Deepavali, Arjun\'s cousin <b>Kavya</b> comes to visit for the first time. Arjun texts her his address: <b>Blk 123 #05-12</b>. A few minutes later, she calls him… from <b>Level 12</b>!',
+    art: corridorScene,
     steps: [
-      { who: 'leo', text: 'As a boy, René was often unwell, so his teachers let him rest in bed late every morning. He did not waste the time: he lay there and <b>thought</b>. He kept this habit all his life.' },
-      { who: 'leo', mood: 'think', text: 'One morning, so the story goes, he watched a fly crawling across the ceiling. He wondered: "How could I tell someone <b>exactly</b> where that fly is, at every moment?"' },
-      { who: 'arjun', mood: 'think', text: '"It\'s near the corner" is not exact enough. The fly keeps moving!' },
-      { who: 'leo', text: 'René looked at the corner where two walls met the ceiling. He realised he only needed to say how far the fly was <b>along</b> one wall and how far it was <b>out</b> from the other. <b>Two numbers</b> pin down any spot!',
-        art: () => grid(6, 4, { u: 40, pts: [{ x: 4, y: 3, mark: 'fly', t: '(4, 3)', at: 'r', dx: 6, dy: 6 }], guides: [[4, 3]], bg: '#fbf6ea', label: 'A fly at the point (4, 3) on a grid', maxw: 320 }) },
-      { who: 'chloe', text: 'So the fly is 4 squares across and 3 squares up. We write that as <b>(4, 3)</b>. The corner where we start counting is <b>(0, 0)</b>.' },
-      { who: 'leo', text: 'Order matters! The <b>across</b> number always comes first, then the <b>up</b> number. (4, 3) and (3, 4) are different spots. Think of a map: first go <b>along</b> (across), then go <b>up</b>. Across first, up second!',
-        art: () => grid(6, 5, { u: 38, pts: [{ x: 4, y: 3, c: '#ff6b5b', t: '(4, 3)', at: 'r' }, { x: 3, y: 4, c: '#4aa8ff', t: '(3, 4)', at: 'l' }], guides: [[4, 3]], label: 'The points (4, 3) and (3, 4) are in different places', maxw: 320 }) },
-      { who: 'aisyah', text: 'In <b>1637</b>, Descartes published a book showing how points, lines and curves could all be described with numbers. Pairs of numbers like (4, 3) are now called <b>Cartesian coordinates</b>, after him. (Nobody knows if the fly story really happened, but the idea certainly did!)' },
-      { who: 'weiming', text: 'And we use his idea every day: maps, the seat plan at the National Stadium, video games, even the map app on a phone. Let\'s try some Singapore maps!' },
+      { who: 'arjun', mood: 'think', text: 'Kavya remembered the numbers 5 and 12, but she went to <b>#12-05</b> and rang a stranger\'s doorbell! The auntie there was very kind and sent her down to Level 5.' },
+      { who: 'leo', text: 'Same two numbers, but a <b>different flat</b>! In an HDB address, the first number is the <b>floor</b> and the second is the <b>unit</b>. #05-12 means floor 5, unit 12. #12-05 means floor 12, unit 5.',
+        art: () => svg('0 0 300 296', `${blockFace({ x: 50, y: 28, fl: [2, 12], un: [5, 12], cw: 30, ch: 16, vd: 18, hi: [{ f: 5, u: 12, ...TEAL }, { f: 12, u: 5, ...CORAL }] })}
+          <rect x="22" y="258" width="16" height="12" rx="3" fill="${TEAL.c}" stroke="${TEAL.lc}" stroke-width="2.4"/><text x="46" y="269" ${NF} font-size="14" fill="${INK}"><tspan fill="${TEAL.lc}">#05-12</tspan> floor 5, unit 12: Arjun ✓</text>
+          <rect x="22" y="278" width="16" height="12" rx="3" fill="${CORAL.c}" stroke="${CORAL.lc}" stroke-width="2.4"/><text x="46" y="289" ${NF} font-size="14" fill="${INK}"><tspan fill="${CORAL.lc}">#12-05</tspan> floor 12, unit 5: a stranger!</text>`,
+        'A block face with floors 2 to 12 and units 5 to 12. Flat #05-12 (floor 5, unit 12) and flat #12-05 (floor 12, unit 5) are in different places', 'style="max-width:300px"') },
+      { who: 'chloe', text: 'So <b>one place needs two numbers</b>, and everybody must agree which number comes <b>first</b>. Swap them and you end up somewhere else. It\'s like Row E, Seat 12 at the cinema: Row 12, Seat E is not even a seat!' },
+      { who: 'leo', text: 'On a <b>grid map</b>, maths has one fixed rule: <b>ACROSS first, then UP</b>. Careful! An HDB address is written the other way round: it gives the floor (the <b>up</b> number) first.',
+        art: () => tbl(['', '1st', '2nd'], [['HDB<br>#05&#8209;12', 'floor&nbsp;5<br>(up)', 'unit&nbsp;12<br>(along)'], ['Grid<br>(4,&nbsp;3)', H('4<br>across'), H('3<br>up')]], 'On a maths grid, always say across first, then up.', true) },
+      { who: 'weiming', text: 'Here\'s a grid map of Arjun\'s estate. Start at the corner <b>(0, 0)</b>. Go <b>4 squares across</b>, then <b>3 squares up</b>: that\'s the playground, at <b>(4, 3)</b>. The hawker centre is at <b>(3, 4)</b>. Same numbers swapped, different place, just like Kavya\'s mix-up!',
+        art: () => estateMap({ guides: [[4, 3]] }) },
+      { who: 'aisyah', text: 'To walk from Blk 123 at (1, 1) to the playground at (4, 3) along the paths, Kavya goes 4 − 1 = <b>3 squares across</b> and 3 − 1 = <b>2 squares up</b>. The shortest walk is 3 + 2 = <b>5 squares</b>. Any route that never turns back is just as short.',
+        art: () => estateMap({ path: [[1, 1], [4, 1], [4, 3]] }) },
+      { who: 'leo', mood: 'teach', text: 'Grids help with shapes too. A new fitness corner from (2, 1) to (5, 3) is 5 − 2 = 3 squares long and 3 − 1 = 2 squares wide, so it covers 3 × 2 = <b>6 squares</b>. Pairs of numbers like (4, 3) are called <b>coordinates</b>. You\'ll meet them again in secondary school!',
+        art: () => grid(6, 4, { rects: [{ p: [[2, 1], [5, 1], [5, 3], [2, 3]], c: '#ffc94a' }], pts: [{ x: 2, y: 1, t: '(2, 1)', at: 'b', c: INK }, { x: 5, y: 3, t: '(5, 3)', at: 't', c: INK }], bg: '#f2fbef', label: 'A rectangle from (2, 1) to (5, 3) covering 6 squares', maxw: 320 }) },
     ],
   },
   keys: [
-    { title: 'Two numbers for one place', text: 'A point on a grid is given by a pair of numbers called its <b>coordinates</b>, like (5, 2).' },
-    { title: 'Across first, then up', text: 'In (5, 2), go 5 squares <b>across</b> from (0, 0), then 2 squares <b>up</b>. The across number is also called the <i>x</i>-coordinate; the up number is the <i>y</i>-coordinate.' },
-    { title: 'Moving on a grid', text: 'Moving right adds to the first number; moving up adds to the second. Left and down take away.' },
-    { title: 'Distance and area', text: 'Along grid lines, distance = squares across + squares up or down. A rectangle 5 squares long and 3 squares wide covers 5 × 3 = 15 squares.' },
+    { title: 'Two numbers, one place', text: 'One place needs <b>two</b> numbers, and the <b>order</b> matters. #05-12 and #12-05 are different flats; (4, 3) and (3, 4) are different points.' },
+    { title: 'Across first, then up', text: 'On a grid, (5, 2) means go 5 squares <b>across</b> from (0, 0), then 2 squares <b>up</b>. (An HDB address is different: #floor-unit, so the floor comes first.)' },
+    { title: 'Moving on a grid', text: 'Moving right adds to the first number; moving up adds to the second. Left and down take away. Shortest grid distance = squares across + squares up or down.' },
+    { title: 'Rectangles on a grid', text: 'Length = difference of the across numbers. Width = difference of the up numbers. Area = length × width; perimeter = 2 × (length + width).' },
   ],
   practice: [
-    { id: 'a', level: 1, type: 'mcq', prompt: 'Here is a simple grid map of some animals at the <b>Singapore Zoo</b>. What is at <b>(6, 3)</b>?',
+    { id: 'a', level: 1, type: 'mcq', prompt: 'Here is one side of <b>Blk 305</b>. In this block, the floors are numbered upwards and the units are numbered from left to right. Mr Rahman lives at <b>#04-16</b> (marked). Uncle Tan lives in the flat <b>directly above</b> Mr Rahman\'s. What is Uncle Tan\'s address?',
+      art: svg('0 0 250 230', blockFace({ x: 58, y: 28, fl: [2, 8], un: [14, 18], cw: 34, ch: 20, vd: 22, hi: [{ f: 4, u: 16, ...CORAL }] }), 'Blk 305: floors 2 to 8, units 14 to 18, with flat #04-16 marked', 'style="max-width:320px"'),
+      options: ['#05-16', '#04-17', '#16-05', '#03-16'], answer: 0,
+      hint: 'Directly above means one floor higher, in the same unit. Which number in #04-16 is the floor?',
+      solution: ['In #04-16, the first number is the <b>floor</b> (4) and the second is the <b>unit</b> (16).', 'Directly above: go up one floor and keep the same unit. Floor 4 + 1 = 5, unit 16.', 'Uncle Tan lives at <b>#05-16</b>.', '#04-17 is next door on the same floor, #03-16 is directly below, and #16-05 swaps the numbers (floor 16 is not even in this block!).'] },
+    { id: 'b', level: 1, type: 'mcq', prompt: 'Here is a simple grid map of some animals at the <b>Singapore Zoo</b>. What is at <b>(6, 3)</b>?',
       art: zooMap(),
       options: ['Tigers', 'Elephants', 'Giraffes', 'Orangutans'], answer: 1,
       hint: 'Start at (0, 0). Go 6 squares across first, then 3 squares up.',
       solution: ['(6, 3) means 6 across, then 3 up.', 'That point is the <b>Elephants</b>.', 'The Tigers are at (3, 6): 3 across and 6 up. Mixing up the order sends you to the wrong animal!'] },
-    { id: 'b', level: 1, type: 'blanks', prompt: 'Use the same zoo map. What are the coordinates of the <b>Giraffes</b>?',
+    { id: 'c', level: 1, type: 'blanks', prompt: 'Use the same zoo map. What are the coordinates of the <b>Giraffes</b>?',
       art: zooMap(),
       template: 'Giraffes: ( {0} , {1} )', blanks: [{ answer: 5, size: 'sm' }, { answer: 1, size: 'sm' }],
       hint: 'From the Giraffes, look straight down to read the across number, then straight left to read the up number.',
       solution: ['Straight down from the Giraffes, the across number is 5.', 'Straight left, the up number is 1.', 'The Giraffes are at <b>(5, 1)</b>. Across first, then up.'] },
-    { id: 'c', level: 1, type: 'mcq', prompt: 'For Sports Day, four game stations A, B, C and D are marked on a grid plan of the school field. Which station is at <b>(4, 0)</b>?',
-      art: grid(5, 5, { pts: [{ x: 0, y: 4, t: 'A', c: '#ff6b5b' }, { x: 4, y: 0, t: 'B', c: '#4aa8ff', at: 't' }, { x: 4, y: 4, t: 'C', c: '#3dbb6b' }, { x: 2, y: 2, t: 'D', c: '#ffc94a' }], bg: '#eaf8e4', label: 'Stations A (0, 4), B (4, 0), C (4, 4), D (2, 2)', maxw: 300 }),
-      options: ['A', 'B', 'C', 'D'], answer: 1,
-      hint: '(4, 0) means 4 across and 0 up. Where do you end up if you do not go up at all?',
-      solution: ['Go 4 squares across from (0, 0), then 0 squares up.', 'You stay on the across line (the <i>x</i>-axis), at station <b>B</b>.', 'Station A is at (0, 4): 0 across and 4 up.'] },
     { id: 'd', level: 2, type: 'blanks', prompt: 'Here is a simple grid map of <b>Sentosa</b> (not to scale). Mei Ling starts at <b>Beach Station</b>. She moves <b>3 squares right</b> and then <b>3 squares up</b>. What are the coordinates of the place she reaches?',
       art: sentosaMap(),
       template: 'She reaches ( {0} , {1} )', blanks: [{ answer: 4, size: 'sm' }, { answer: 4, size: 'sm' }],
       hint: 'Beach Station is at (1, 1). Moving right adds to the first number; moving up adds to the second.',
       solution: ['Beach Station is at (1, 1).', '3 squares right: 1 + 3 = 4. 3 squares up: 1 + 3 = 4.', 'She reaches <b>(4, 4)</b>, which is the Luge.'] },
     { id: 'e', level: 2, type: 'blanks', prompt: 'On the Sentosa grid map, each square is <b>100 m</b> wide. Paths run only along the grid lines. What is the <b>shortest</b> walking distance from <b>Fort Siloso</b> to <b>Tanjong Beach</b>?',
-      art: sentosaMap({}),
+      art: sentosaMap(),
       template: '{0} m', blanks: [{ answer: 1100 }],
       hint: 'Find the coordinates of both places. How many squares across and how many squares down?',
       solution: ['Fort Siloso is at (1, 6) and Tanjong Beach is at (8, 2).', 'Across: 8 − 1 = 7 squares. Down: 6 − 2 = 4 squares.', 'Any shortest path along the grid lines has 7 + 4 = 11 squares (the purple path is one of them).', sentosaMap({ path: [[1, 6], [1, 3], [8, 3], [8, 2]] }), '11 × 100 m = <b>1100 m</b>.'] },
@@ -402,11 +455,12 @@ const S3 = {
       template: 'Area = {0} m² &nbsp;&nbsp; Perimeter = {1} m', blanks: [{ answer: 15, size: 'sm' }, { answer: 16, size: 'sm' }],
       hint: 'Length = difference of the across numbers of P and Q. Width = difference of the up numbers of Q and R.',
       solution: ['Length PQ: 7 − 2 = 5 m. Width QR: 4 − 1 = 3 m.', 'Area = 5 × 3 = <b>15 m²</b> (count the squares to check!).', 'Perimeter = 5 + 3 + 5 + 3 = <b>16 m</b>.'] },
-    { id: 'g', level: 3, type: 'blanks', prompt: 'A treasure is buried somewhere on the Sentosa grid map. The clue says: <i>"Its across number is <b>2 more</b> than its up number, and the two numbers <b>add up to 10</b>."</i> Where is the treasure?',
-      art: sentosaMap(),
-      template: 'The treasure is at ( {0} , {1} )', blanks: [{ answer: 6, size: 'sm' }, { answer: 4, size: 'sm' }],
-      hint: 'Two numbers add up to 10 and differ by 2. Take away the difference, then share the rest equally.',
-      solution: ['The two numbers add up to 10, and the across number is 2 more than the up number.', 'Take away the extra 2: 10 − 2 = 8. Share equally: up number = 8 ÷ 2 = 4.', 'Across number = 4 + 2 = 6.', 'The treasure is at <b>(6, 4)</b>. Check: 6 + 4 = 10 ✓ and 6 − 4 = 2 ✓'] },
+    { id: 'g', level: 3, type: 'blanks', prompt: '<b>Blk 218</b> has flats on floors 02 to 12, above the void deck. On every floor, the units are numbered <b>41 to 46</b> from left to right. For <b>National Day</b>, the residents\' committee gives a flag to every flat in a rectangle on the side of the block. One corner of the rectangle is <b>#03-42</b>, and the opposite corner is <b>#10-45</b>. How many floors and how many units on each floor does the rectangle cover? How many flags are needed?',
+      template: '{0} floors &nbsp;&nbsp; {1} units on each floor &nbsp;&nbsp; {2} flags', blanks: [{ answer: 8, size: 'sm' }, { answer: 4, size: 'sm' }, { answer: 32 }],
+      hint: 'Write out the floors from 3 to 10 and count them. Do the same for the units from 42 to 45. Careful: 10 − 3 does not count the floors!',
+      solution: ['In #03-42 and #10-45, the first numbers are floors and the second numbers are units.', 'Floors: 3, 4, 5, 6, 7, 8, 9, 10. That is 10 − 3 + 1 = <b>8 floors</b>. (10 − 3 = 7 only counts the steps <i>between</i> floor 3 and floor 10.)', 'Units: 42, 43, 44, 45. That is 45 − 42 + 1 = <b>4 units</b> on each floor.',
+        svg('0 0 300 254', blockFace({ x: 50, y: 28, fl: [2, 12], un: [41, 46], cw: 34, ch: 16, vd: 18, zone: { f0: 3, f1: 10, u0: 42, u1: 45, c: '#ffe08a', flag: true }, hi: [{ f: 3, u: 42, ...CORAL }, { f: 10, u: 45, ...CORAL }] }), 'Blk 218: the flats from #03-42 to #10-45 form a rectangle 4 units wide and 8 floors high, each with a flag', 'style="max-width:300px"'),
+        'Flags: 8 × 4 = <b>32</b>.', 'On a block face, every flat has its own number, so we count the numbers from one end to the other, including both ends.'] },
     { id: 'h', level: 3, type: 'blanks', prompt: 'A cleaning robot at <b>Changi Airport</b> starts at (0, 0) on the floor grid. It moves <b>3 right</b>, <b>4 up</b>, <b>2 right</b>, <b>1 down</b> and then <b>4 left</b>. Where does it stop? Then it must go back to (0, 0) along the grid lines. What is the shortest distance back, in squares?',
       art: grid(6, 5, { pts: [{ x: 0, y: 0, t: 'Start', at: 'r', dy: -14, c: '#3dbb6b' }], bg: '#f4f6fb', label: 'A floor grid with the robot starting at (0, 0)', maxw: 320 }),
       template: 'It stops at ( {0} , {1} ). Shortest way back: {2} squares.', blanks: [{ answer: 1, size: 'sm' }, { answer: 3, size: 'sm' }, { answer: 4, size: 'sm' }],
@@ -420,9 +474,17 @@ const S3 = {
       hint: 'First count the grid squares: lawn squares minus pond squares. Then remember each square is 10 m × 10 m = 100 m².',
       solution: ['Lawn: (7 − 1) × (5 − 1) = 6 × 4 = 24 squares.', 'Pond: (5 − 3) × (4 − 2) = 2 × 2 = 4 squares.', 'Grass: 24 − 4 = 20 squares.', 'Each square is 10 m × 10 m = 100 m², so the grass covers 20 × 100 = <b>2000 m²</b>.'] },
   ],
-  adult: 'This Maths Story retells the life of René Descartes (1596–1650). It is well recorded that poor health as a schoolboy let him stay in bed late in the mornings, a habit he kept for life; the fly on the ceiling is a popular legend. His 1637 work <i>La Géométrie</i> joined algebra and geometry. Links to school work: P4 area and perimeter of rectangles. Coordinates themselves are taught in <b>secondary school</b>, so the grid questions are <b>enrichment</b>, kept to whole numbers and the first quadrant. Common mistakes: writing the up number first, e.g. (3, 6) for (6, 3); counting dots instead of squares when finding lengths. Tip: say "along first, then up" every time you plot a point.',
+  adult: 'This Maths Story is an original Singapore story built on something every child here already uses: the HDB address. <b>#05-12</b> is a pair of numbers in a fixed order (floor, then unit), and swapping them gives a different flat. The story then moves to grid maps, where the fixed order is <b>across first, then up</b>. These number pairs are called <b>coordinates</b>; they are formally taught in <b>secondary school</b>, so this page is <b>enrichment</b>, kept to whole numbers and the first quadrant. Links to school work: P4 <b>area and perimeter</b> of rectangles (questions f and i), and reading values from tables and from the two axes of a line graph (P4 data analysis). Please point out the one trap on purpose: an HDB address names the floor (the <i>up</i> number) first, while a maths grid always names the <i>across</i> number first. In real blocks unit numbers do not always run neatly from left to right, so the questions use tidy pretend blocks. Common mistakes: writing the up number first, e.g. (3, 6) for (6, 3); counting dots instead of squares when finding lengths; and in question g, using 10 − 3 = 7 for the number of floors from 3 to 10 (there are 8, because both ends count). Tip: on a walk around your block, ask your child to read the flat numbers and say which number is the floor and which is the unit. Then sketch the block as a grid together.',
 };
 
+// Keep HDB addresses such as "Blk 123 #05-12" and points such as (4, 3) on one line in S3's text (SVG pictures and MCQ options are left alone).
+{
+  const nw = x => typeof x === 'string' && !/^\s*<svg/.test(x) ? x.replace(/(Blk \d+ )?#\d\d-\d\d|\(\d+, \d+\)/g, m => `<span style="white-space:nowrap">${m}</span>`) : x;
+  S3.intro = nw(S3.intro); S3.explore.setup = nw(S3.explore.setup); S3.adult = nw(S3.adult);
+  for (const st of S3.explore.steps) st.text = nw(st.text);
+  for (const k of S3.keys) k.text = nw(k.text);
+  for (const q of S3.practice) { q.prompt = nw(q.prompt); q.hint = nw(q.hint); q.solution = Array.isArray(q.solution) ? q.solution.map(nw) : nw(q.solution); }
+}
 for (const t of [t21, t22, S3]) for (const st of t.explore.steps) if (st.art) { const f = st.art; st.art = () => fit(f()); }
 for (const t of [t21, t22, S3]) for (const q of t.practice) if (Array.isArray(q.solution))
   q.solution = q.solution.reduce((acc, x) => { if (/^\s*<(svg|table|div)/.test(x) && acc.length) acc[acc.length - 1] += fit(x); else acc.push(x); return acc; }, []);

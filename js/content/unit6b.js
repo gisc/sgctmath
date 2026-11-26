@@ -353,99 +353,168 @@ const t19 = {
   adult: 'Links to school work: spotting and continuing number patterns is part of P4 (and P5) mathematics, so finding the next numbers and the common difference is <b>within</b> the syllabus. Writing a general rule for the <i>n</i>th number, counting how many numbers are in a list, and adding a whole pattern by pairing (the trick told about the young Carl Friedrich Gauss) go beyond it and are <b>enrichment</b> (P5/P6 and olympiad style). Common mistakes: using <i>n</i> × difference instead of (<i>n</i> − 1) × difference (the "fence-post" mistake: there is one gap fewer than posts); forgetting the +1 when counting numbers; forgetting to halve when pairing. Tip: for any new pattern, write out the first few numbers and test the rule on them before trusting it.',
 };
 
-/* ===================== Maths Story: Han Xin ===================== */
-function soldier(x, y, s = 1, hi = false) {
-  return `<g transform="translate(${x} ${y}) scale(${s})">
-    <path d="M9 -14 V20" stroke="#8a5a3c" stroke-width="2.4" stroke-linecap="round"/><path d="M9 -20 l-3 7 h6z" fill="#c9cfdc" stroke="${INK}" stroke-width="1.4"/>
-    <rect x="-7" y="2" width="14" height="17" rx="4" fill="${hi ? CORAL : '#8fb7a2'}" stroke="${INK}" stroke-width="2"/>
-    <circle cx="0" cy="-5" r="7" fill="#f3cfae" stroke="${INK}" stroke-width="2"/>
-    <path d="M-7.5 -6 q0 -9 7.5 -9 q7.5 0 7.5 9z" fill="${hi ? '#c0392b' : '#5d6b88'}" stroke="${INK}" stroke-width="1.8"/></g>`;
+/* ===================== Maths Story: Counting the NDP Contingent ===================== */
+// uniformed-group colours (uniform, beret, trim)
+const UNI = {
+  npcc: { uni: '#2f4a7a', beret: '#1c2a4a', trim: '#ffc94a', tud: '#2f4a7a' },
+  scout: { uni: '#c9a66b', beret: '#3b5d3a', trim: '#e1484b', tud: '#3b5d3a', scarf: true },
+  redcross: { uni: '#f4f6fb', beret: '#e1484b', trim: '#e1484b', tud: '#ffffff' },
+  brigade: { uni: '#4a5d8c', beret: '#23304a', trim: '#ffffff', tud: '#23304a' },
+};
+const SKIN = ['#f6d2b0', '#d9a77d', '#a8714f', '#f3cfae', '#8a5a3c'];
+// a modern uniformed-group cadet, about 50 units tall at s = 1 (head centre at y = -5, shoes at y = 32)
+function cadet(x, y, s = 1, { g = 'npcc', skin = SKIN[0], tudung = false } = {}) {
+  const u = UNI[g];
+  const collar = u.scarf
+    ? `<path d="M-5 3.5 l5 8 l5 -8z" fill="${u.trim}" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>`
+    : `<path d="M-4 3.5 l4 4 l4 -4" fill="none" stroke="${g === 'redcross' ? INK : '#fff'}" stroke-width="1.5" stroke-linecap="round"/><path d="M-8.5 8 q3 6 6.5 1" fill="none" stroke="${u.trim}" stroke-width="1.8" stroke-linecap="round"/>`;
+  return `<g transform="translate(${r1(x)} ${r1(y)}) scale(${s})">
+    <rect x="-6" y="20" width="5" height="11" rx="1" fill="#2b3550" stroke="${INK}" stroke-width="1.6"/><rect x="1" y="20" width="5" height="11" rx="1" fill="#2b3550" stroke="${INK}" stroke-width="1.6"/>
+    <ellipse cx="-3.8" cy="32" rx="4.4" ry="2.3" fill="${INK}"/><ellipse cx="3.8" cy="32" rx="4.4" ry="2.3" fill="${INK}"/>
+    <path d="M-9.5 4 q9.5 -3.5 19 0 l1 18 h-21z" fill="${u.uni}" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>${collar}
+    ${tudung ? `<path d="M-9.5 -4 q0 -12 9.5 -12 q9.5 0 9.5 12 q1 7 -3 10 h-13 q-4 -3 -3 -10z" fill="${u.tud}" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>` : ''}
+    <circle cx="0" cy="-5" r="${tudung ? 6 : 7}" fill="${skin}" stroke="${INK}" stroke-width="1.8"/>
+    <circle cx="-2.5" cy="-4.5" r="1.1" fill="${INK}"/><circle cx="2.5" cy="-4.5" r="1.1" fill="${INK}"/>
+    <path d="M-8.5 -7.5 q-1.5 -9 8 -10 q10 -1 10 7 q-8 -3 -18 3z" fill="${u.beret}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/><circle cx="-3.5" cy="-12" r="1.7" fill="#ffc94a"/>
+  </g>`;
 }
-function general(x, y, s = 1) {
-  const k = { skin: '#f0c8a0', hair: 'short', hairC: '#2b2321', shirt: '#c0392b', bottom: '#5d6b88' };
-  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-26 36 q-14 40 -20 74 h92 q-6 -34 -20 -74z" fill="#e0282e" ${S}/></g>` +
-    kid(k, { x, y, s, pose: 'wave' }) +
-    `<g transform="translate(${x} ${y}) scale(${s})">
-      <path d="M-24 36 q24 -10 48 0 l2 38 h-52z" fill="#b8c2d6" ${S}/><path d="M-22 50 h44 M-23 62 h46 M-6 38 v34 M8 38 v34" stroke="#7d8aa6" stroke-width="2"/>
-      <path d="M-24 70 h48" stroke="#8a5a3c" stroke-width="6"/>
-      <path d="M-35 0 q-2 -42 35 -42 q37 0 35 42 q-8 -14 -35 -16 q-27 2 -35 16z" fill="#c9cfdc" ${S}/>
-      <path d="M-35 0 q-6 6 -4 14 M35 0 q6 6 4 14" fill="none" ${S}/>
-      <path d="M0 -42 q-8 -22 10 -34 q-2 16 4 32z" fill="#e0282e" ${S} stroke-width="2.4"/>
-      <path d="M-12 22 q12 10 24 0" fill="none" stroke="#2b2321" stroke-width="3" stroke-linecap="round"/></g>`;
+// small cadet head with beret (for counting diagrams)
+const cadetHead = (x, y, g, hi = false) => `<g transform="translate(${r1(x)} ${r1(y)}) scale(.78)">${hi ? `<circle r="10.5" fill="${CORAL}" opacity=".55"/>` : ''}<circle cy="1" r="6.5" fill="${SKIN[(Math.round(x) >> 4) % 5]}" stroke="${INK}" stroke-width="1.8"/><path d="M-8 -1.5 q-1.5 -9 8 -10 q10 -1 10 7 q-8 -3 -18 3z" fill="${UNI[g].beret}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/></g>`;
+// Kavitha, the cadet leader: a kid figure in uniform with a beret and lanyard
+function leader(x, y, s) {
+  const k = { skin: '#a8714f', hair: 'ponytail', hairC: '#1d1716', shirt: '#2f4a7a', bottom: '#2f4a7a' };
+  return kid(k, { x, y, s, pose: 'wave' }) + `<g transform="translate(${x} ${y}) scale(${s})">
+    <path d="M-20 42 q8 18 20 10" fill="none" stroke="#ffc94a" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M-34 -14 q-3 -28 30 -30 q36 -2 40 22 q-32 -10 -70 8z" fill="#1c2a4a" ${S}/><circle cx="-15" cy="-28" r="5" fill="#ffc94a" ${S} stroke-width="2"/></g>`;
+}
+// Singapore flag: red over white, crescent and five stars
+function sgFlag(x, y, w = 54) {
+  const h = w * 2 / 3, cx = w * .22, cy = h * .25, R = h * .17, sx = w * .34, sy = h * .25, sr = h * .1, st = h * .042;
+  const star = (a, b) => `<path d="${[...Array(10)].map((_, i) => { const t = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? st * .45 : st; return `${i ? 'L' : 'M'}${r1(a + rr * Math.cos(t))} ${r1(b + rr * Math.sin(t))}`; }).join('')}Z" fill="#fff"/>`;
+  const stars = [...Array(5)].map((_, i) => { const t = -Math.PI / 2 + i * 2 * Math.PI / 5; return star(sx + sr * Math.cos(t), sy + sr * Math.sin(t)); }).join('');
+  return `<g transform="translate(${x} ${y})"><rect width="${w}" height="${r1(h)}" fill="#fff"/><rect width="${w}" height="${r1(h / 2)}" fill="#e0282e"/>
+    <circle cx="${r1(cx)}" cy="${r1(cy)}" r="${r1(R)}" fill="#fff"/><circle cx="${r1(cx + R * .38)}" cy="${r1(cy)}" r="${r1(R * .88)}" fill="#e0282e"/>${stars}
+    <rect width="${w}" height="${r1(h)}" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/></g>`;
+}
+// distant Marina Bay Sands skyline (base at y)
+function bayTowers(x, y, s = 1) {
+  const tw = (dx) => `<path d="M${dx} 0 l2 -46 h12 l2 46z" fill="#cfe0f2" stroke="#7f98bd" stroke-width="2" stroke-linejoin="round"/>`;
+  return `<g transform="translate(${x} ${y}) scale(${s})">${tw(0)}${tw(24)}${tw(48)}
+    <path d="M-6 -46 h82 q8 0 10 -4 h-92z" fill="#e6eef8" stroke="#7f98bd" stroke-width="2" stroke-linejoin="round"/></g>`;
 }
 // clue panels: rows of k with r left over (unknown total, so only a few rows are shown)
-function lineUps(clues, { W = 340, unitWord = 'rows', label = 'Lining up in rows, with some left over' } = {}) {
-  const sp = 16, pads = 16;
+function lineUps(clues, { W = 340, unitWord = 'rows', label = 'Lining up in rows, with some left over', cadets = false } = {}) {
+  const sp = 16, pads = 16, gs = ['npcc', 'scout', 'redcross', 'brigade'];
   const widths = clues.map(([k]) => Math.max(k * sp + pads, 92));
   const gap = (W - widths.reduce((a, b) => a + b, 0)) / (clues.length + 1);
+  const item = (cx, cy, j, hi) => cadets ? cadetHead(cx, cy, gs[j % 4], hi) : `<circle cx="${r1(cx)}" cy="${cy}" r="6" fill="${hi ? CORAL : '#9fe3dc'}" stroke="${INK}" stroke-width="1.8"/>`;
   let g = '', x = gap;
   clues.forEach(([k, r, title], i) => {
     const w = widths[i], cx = x + w / 2, x0 = cx - (k - 1) * sp / 2;
     g += `<rect x="${r1(x)}" y="8" width="${r1(w)}" height="150" rx="12" fill="#fff" stroke="#c9d3e6" stroke-width="2"/>`;
     g += tx(r1(cx), 30, title || `${unitWord} of ${k}`, { size: 15, b: true, fill: '#0f7a73' });
-    for (let row = 0; row < 2; row++) for (let j = 0; j < k; j++) g += `<circle cx="${r1(x0 + j * sp)}" cy="${48 + row * 20}" r="6" fill="#9fe3dc" stroke="${INK}" stroke-width="1.8"/>`;
+    for (let row = 0; row < 2; row++) for (let j = 0; j < k; j++) g += item(x0 + j * sp, 48 + row * 20, j + row, false);
     g += tx(r1(cx), 104, '⋮', { size: 20, b: true });
-    for (let j = 0; j < r; j++) g += `<circle cx="${r1(x0 + j * sp)}" cy="120" r="6" fill="${CORAL}" stroke="${INK}" stroke-width="1.8"/>`;
+    for (let j = 0; j < r; j++) g += item(x0 + j * sp, 120, j + 1, true);
     g += tx(r1(cx), 148, r === 0 ? 'none left over' : `${r} left over`, { size: 14, fill: '#d6453a' });
     x += w + gap;
   });
   return svg(`0 0 ${W} 166`, panel(W, 166, g, '#f3f6fb'), label, `style="max-width:${W + 40}px"`);
 }
+// number line from 0 to max: hops of d from start; the range lo..hi is shaded
+function hopLine({ start, d, max = 200, lo = 150, hi = 200, good = [], faded = [], W = 340 }) {
+  const x0 = 22, x1 = 318, ay = 84, H = 146, X = v => r1(x0 + (x1 - x0) * v / max);
+  const vals = []; for (let v = start; v <= max; v += d) vals.push(v);
+  let g = `<rect x="${X(lo)}" y="${ay - 50}" width="${r1(X(hi) - X(lo))}" height="84" rx="8" fill="#fff3c4" stroke="#f2a516" stroke-width="2" stroke-dasharray="5 4"/>`;
+  g += tx(X((lo + hi) / 2), ay + 54, `${lo} to ${hi}`, { size: 14, fill: '#c77d00', b: true });
+  g += `<path d="M${x0} ${ay} H${x1 + 8}" ${S} stroke-width="2.6"/><path d="M${x1 + 2} ${ay - 6} l7 6 l-7 6" fill="none" ${S} stroke-width="2.6"/><path d="M${x0} ${ay - 7} v14" ${S} stroke-width="2.6"/>` + tx(x0, ay + 26, '0', { size: 14, fill: '#5d6b88' });
+  const arc = (a, b, dash) => { const m = r1((a + b) / 2), c = dash ? '#9aa6bd' : CORAL; return `<path d="M${a + 6} ${ay - 9} Q${m} ${ay - 44} ${b - 6} ${ay - 9}" fill="none" stroke="${c}" stroke-width="2.6" ${dash ? 'stroke-dasharray="5 5"' : ''}/><path d="M${r1(b - 13)} ${ay - 15} L${r1(b - 6)} ${ay - 9} L${r1(b - 15)} ${ay - 7}" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`; };
+  for (let i = 0; i + 1 < vals.length; i++) { const fd = faded.includes(vals[i + 1]); g += arc(X(vals[i]), X(vals[i + 1]), fd) + tx(r1((X(vals[i]) + X(vals[i + 1])) / 2), ay - 32, `+${d}`, { size: 14, fill: fd ? '#7d8aa6' : '#d6453a' }); }
+  vals.forEach(v => { const ok = good.includes(v), fd = faded.includes(v); g += `<circle cx="${X(v)}" cy="${ay}" r="7" fill="${ok ? LEAF : fd ? '#dfe4ee' : '#9fe3dc'}" stroke="${fd ? '#7d8aa6' : INK}" stroke-width="2"/>` + tx(X(v), ay + 26, v, { size: 15, b: true, fill: ok ? '#1f8a4c' : fd ? '#7d8aa6' : INK }); });
+  return svg(`0 0 ${W} ${H}`, panel(W, H, g, '#f6fbff'), `Number line from 0 to ${max}: ${vals.join(', ')}, jumps of ${d}; the range ${lo} to ${hi} is shaded`, `style="max-width:${W + 40}px"`);
+}
 const remTable = (rows, heads) => `<table class="tbl" style="font-size:15px"><thead><tr>${heads.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${r.map((c, i) => `<td class="${r.ok && i === r.length - 1 ? 'hl' : ''}" style="white-space:nowrap">${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 const mk = (arr, ok) => Object.assign(arr, { ok });
+const remRow = (n, d, want) => { const q = Math.floor(n / d), r = n % d; return mk([`${n}`, `${n} ÷ ${d} = ${q} r ${r}`, r === want ? '✓' : '✗'], r === want); };
 
 const S2 = {
   id: 'S2',
-  title: 'Maths Story: Han Xin Counts His Soldiers',
-  intro: 'How do you count a whole army in moments? A famous general from ancient China did it with nothing but rows and remainders. Discover his secret!',
-  skills: ['Remainders', 'Multiples', 'Lists and tables'],
+  title: 'Counting the NDP Contingent',
+  intro: 'How many cadets turned up for the NDP rehearsal? Nobody has time to count them one by one! A few drill commands and the cadets left over in each line-up are all the clues you need.',
+  skills: ['Remainders', 'Common multiples', 'List and test'],
   art: () => {
-    let troops = '';
-    for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) troops += soldier(190 + c * 32, 82 + r * 32, .82);
-    troops += soldier(190, 190, .82, true) + soldier(222, 190, .82, true);
+    const mix = [['npcc', 0], ['scout', 2], ['redcross', 3], ['brigade', 1], ['npcc', 4], ['redcross', 0], ['scout', 1], ['brigade', 3], ['npcc', 2], ['scout', 4], ['redcross', 1], ['brigade', 0]];
+    let troops = '', k = 0;
+    [86, 110, 134, 158].forEach(y => [214, 246, 278].forEach(x => { const [g, sk] = mix[k]; troops += cadet(x, y, .8, { g, skin: SKIN[sk], tudung: k === 4 || k === 10 }); k++; }));
+    troops += cadet(214, 184, .8, { g: 'scout', skin: SKIN[3] }) + cadet(246, 184, .8, { g: 'npcc', skin: SKIN[1], tudung: true });
     return svg('0 0 360 220', panel(360, 220, `
-      <rect x="0" y="0" width="360" height="220" fill="#fdf0d8"/>
-      <path d="M0 64 h360 v-20 ${[...Array(12)].map(() => 'h-15 v-10 h-15 v10').join(' ')}z" fill="#e3c9a0" ${S} stroke-width="2.4"/>
-      <rect x="0" y="64" width="360" height="156" fill="#f1e2c4"/>
-      <path d="M150 64 v-46" ${S}/><path d="M150 18 h30 l-6 9 l6 9 h-30z" fill="#e0282e" ${S} stroke-width="2.4"/>${tx(162, 32, '漢', { size: 14, fill: '#fff' })}
-      ${general(72, 100, .78)}
+      <rect x="0" y="0" width="360" height="220" fill="#dff1ff"/>
+      ${A.cloud(250, 52, .6)}
+      ${bayTowers(66, 112, .9)}
+      <path d="M0 112 ${[...Array(12)].map(() => 'q15 -12 30 0').join(' ')} V120 H0z" fill="#6fcf87"/>
+      <rect x="0" y="112" width="360" height="108" fill="#9edcaa"/>
+      <path d="M0 204 H360" stroke="#fff" stroke-width="4"/>
+      <path d="M30 206 V18" stroke="${INK}" stroke-width="5" stroke-linecap="round"/><path d="M30 206 V18" stroke="#c9cfdc" stroke-width="2"/><circle cx="30" cy="16" r="4" fill="${SUN}" ${S} stroke-width="2"/>
+      ${sgFlag(32, 22, 54)}
+      ${leader(138, 124, .5)}
       ${troops}
-      <rect x="174" y="168" width="72" height="42" rx="10" fill="none" stroke="${CORAL}" stroke-width="2.6" stroke-dasharray="6 4"/>
-      ${tx(300, 196, '2 left', { size: 15, b: true, fill: '#d6453a' })}${tx(300, 212, 'over!', { size: 15, b: true, fill: '#d6453a' })}
-      <rect x="204" y="8" width="128" height="32" rx="16" fill="#fff" ${S}/>${tx(268, 31, 'Rows of 5!', { size: 19, b: true, fill: '#c0392b' })}`, '#fdf0d8'), 'General Han Xin orders his soldiers into rows of 5; 2 soldiers are left over');
+      <rect x="194" y="164" width="72" height="50" rx="10" fill="none" stroke="${CORAL}" stroke-width="2.6" stroke-dasharray="6 4"/>
+      ${tx(314, 190, '2 left', { size: 15, b: true, fill: '#d6453a' })}${tx(314, 206, 'over!', { size: 15, b: true, fill: '#d6453a' })}
+      <path d="M170 46 L152 96 L190 46z" fill="#fff" ${S}/>
+      <rect x="146" y="10" width="200" height="38" rx="19" fill="#fff" ${S}/><path d="M168 46 h24" stroke="#fff" stroke-width="5"/>
+      ${tx(246, 36, 'In threes, fall in!', { size: 18, b: true, fill: '#c0392b' })}`, '#dff1ff'), 'At the Padang, cadet leader Kavitha calls the contingent into rows of 3 beside the Singapore flag; 2 cadets are left over');
   },
   explore: {
     title: 'The Story',
-    setup: 'More than 2200 years ago in ancient China, <b>Han Xin</b> was a brilliant general. He helped Liu Bang win the throne and start the Han dynasty. A famous legend tells how Han Xin could count his whole army in moments, without counting the soldiers one by one.',
+    setup: 'It\'s an NDP rehearsal at the <b>Padang</b>! Arjun\'s cousin <b>Kavitha</b> leads a contingent of uniformed-group cadets from the NPCC, Scouts, Red Cross and Boys\' Brigade. Just before the march-past, a sudden shower soaks the attendance sheet of the teacher-in-charge, <b>Mr Gomes</b>. He must report how many cadets are present, and all he knows is that there are <b>between 150 and 200</b>.',
     art: () => svg('0 0 340 300', panel(340, 300, `
-      <rect x="0" y="210" width="340" height="90" fill="#9edcaa"/>
-      <rect x="58" y="16" width="224" height="132" rx="6" fill="#fff6dc" ${S}/>
-      <rect x="44" y="10" width="16" height="144" rx="8" fill="#c98b55" ${S}/><rect x="280" y="10" width="16" height="144" rx="8" fill="#c98b55" ${S}/>
-      ${tx(170, 44, 'Han Xin\'s clues', { size: 18, b: true, fill: '#c0392b' })}
-      ${tx(170, 72, 'rows of 3 → 1 left over', { size: 15 })}
-      ${tx(170, 96, 'rows of 5 → 2 left over', { size: 15 })}
-      ${tx(170, 120, 'rows of 7 → 3 left over', { size: 15 })}
-      ${tx(170, 142, 'between 900 and 1000', { size: 13, fill: '#5d6b88' })}
-      ${kid('arjun', { x: 70, y: 194, s: .7, pose: 'think', mood: 'think' })}
-      ${leo({ x: 176, y: 196, s: .62, pose: 'point' })}
-      ${kid('aisyah', { x: 282, y: 194, s: .7, pose: 'wave' })}`, '#eaf6ff'), 'A scroll listing Han Xin\'s three clues, with Arjun, Leo and Aisyah'),
+      <rect x="0" y="0" width="340" height="300" fill="#eaf6ff"/>
+      <path d="M0 6 Q170 30 340 6" fill="none" stroke="${INK}" stroke-width="1.6"/>
+      ${[...Array(11)].map((_, i) => { const x = 14 + i * 30, y = r1(6 + 24 * (1 - Math.pow((x - 170) / 170, 2)) * .75); return `<path d="M${x - 8} ${y} h16 l-8 13z" fill="${i % 2 ? '#fff' : '#e0282e'}" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>`; }).join('')}
+      <circle cx="300" cy="48" r="17" fill="#ffd45c"/><circle cx="300" cy="48" r="25" fill="#ffd45c" opacity=".25"/>
+      <path d="M18 54 q-2 -16 16 -14 q5 -13 21 -8 q13 -8 22 5 q14 0 13 17z" fill="#b9c3d6" stroke="#8a96ad" stroke-width="2"/>
+      <path d="M32 62 l-4 9 M48 62 l-4 9 M64 62 l-4 9" stroke="#4aa8ff" stroke-width="2.6" stroke-linecap="round"/>
+      <rect x="0" y="252" width="340" height="48" fill="#9edcaa"/>
+      <g transform="translate(26 82) rotate(-4)">
+        <rect width="134" height="122" rx="10" fill="#c98b55" ${S}/>
+        <rect x="10" y="14" width="114" height="100" rx="3" fill="#fff" stroke="${INK}" stroke-width="2"/>
+        <rect x="47" y="-6" width="40" height="16" rx="4" fill="#c9cfdc" ${S} stroke-width="2.4"/>
+        ${tx(67, 34, 'ATTENDANCE', { size: 13, b: true })}
+        ${[0, 1, 2].map(i => `<path d="M20 ${48 + i * 16} h40 M70 ${48 + i * 16} h40" stroke="#c9d3e6" stroke-width="3" stroke-linecap="round"/>`).join('')}
+        <ellipse cx="52" cy="58" rx="28" ry="12" fill="#4aa8ff" opacity=".35"/><ellipse cx="92" cy="72" rx="22" ry="10" fill="#4aa8ff" opacity=".3"/>
+        ${tx(67, 104, 'Total: ???', { size: 15, b: true, fill: '#d6453a' })}
+      </g>
+      <g transform="translate(182 76) rotate(3)">
+        <rect width="142" height="126" rx="8" fill="#fff8d6" ${S}/>
+        ${[0, 1, 2, 3, 4, 5].map(i => `<circle cx="${22 + i * 20}" cy="2" r="4" fill="#fff" stroke="${INK}" stroke-width="2"/>`).join('')}
+        ${tx(71, 28, 'Clues', { size: 16, b: true, fill: '#0f7a73' })}
+        ${tx(71, 52, 'rows of 3 → 2 left', { size: 13 })}
+        ${tx(71, 74, 'rows of 5 → 3 left', { size: 13 })}
+        ${tx(71, 96, 'rows of 7 → 4 left', { size: 13 })}
+        ${tx(71, 116, '150 to 200 cadets', { size: 12, fill: '#5d6b88' })}
+      </g>
+      ${kid('chloe', { x: 62, y: 230, s: .52, pose: 'wave' })}
+      ${leo({ x: 168, y: 230, s: .47, pose: 'point' })}
+      ${kid('weiming', { x: 282, y: 230, s: .52, pose: 'think', mood: 'think' })}`, '#eaf6ff'), 'A rain-soaked attendance sheet with the total smudged, next to a notepad of three clues; Chloe, Leo and Wei Ming are ready to help'),
     steps: [
-      { who: 'leo', text: 'After a battle, Han Xin needed to know how many soldiers he still had. Counting about a thousand soldiers one at a time would take far too long! So he gave three orders.' },
-      { who: 'leo', text: '"Line up in rows of 3!" <b>1</b> soldier was left over. "Rows of 5!" <b>2</b> were left over. "Rows of 7!" <b>3</b> were left over. Han Xin knew he had between 900 and 1000 soldiers. He smiled and said: "We have <b>997</b> soldiers."',
-        art: () => lineUps([[3, 1], [5, 2], [7, 3]], { label: 'Rows of 3: 1 left over. Rows of 5: 2 left over. Rows of 7: 3 left over' }) },
-      { who: 'arjun', mood: 'think', text: 'How did he know? Let\'s start with just two clues. Numbers that leave <b>2</b> when divided by 5 are 2, 7, 12, 17, … Now test each one: does it leave <b>1</b> when divided by 3?',
-        art: () => remTable([mk(['2', '2 ÷ 3 = 0 r 2', '✗'], false), mk(['7', '7 ÷ 3 = 2 r 1', '✓'], true)], ['Number', '÷ 3', 'r 1?']) },
-      { who: 'chloe', text: '<b>7</b> fits both clues! To find the next one, jump by <b>15</b>. 15 is a multiple of both 3 and 5, so adding it doesn\'t change either remainder: 7, 22, 37, 52, 67, …' },
-      { who: 'aisyah', text: 'Now test the third clue: which one leaves <b>3</b> when divided by 7?',
-        art: () => remTable([mk(['7', '7 ÷ 7 = 1 r 0', '✗'], false), mk(['22', '22 ÷ 7 = 3 r 1', '✗'], false), mk(['37', '37 ÷ 7 = 5 r 2', '✗'], false), mk(['52', '52 ÷ 7 = 7 r 3', '✓'], true)], ['Number', '÷ 7', 'r 3?']) },
-      { who: 'leo', mood: 'teach', text: '<b>52</b> is the smallest number that fits all three clues. To keep <b>all three</b> remainders, jump by 3 × 5 × 7 = <b>105</b>: 52, 157, 262, 367, 472, 577, 682, 787, 892, <b>997</b>, 1102, … Only 997 is between 900 and 1000!' },
-      { who: 'weiming', text: 'Let me check: 997 ÷ 3 = 332 r <b>1</b> ✓, 997 ÷ 5 = 199 r <b>2</b> ✓, 997 ÷ 7 = 142 r <b>3</b> ✓. Han Xin was right!' },
+      { who: 'arjun', text: 'Kavitha has a plan. "Contingent, in rows of 3, fall in!" <b>2</b> cadets are left over. "Rows of 5!" <b>3</b> are left over. "Rows of 7!" <b>4</b> are left over. Mr Gomes is still counting heads one by one. Can we beat him?',
+        art: () => lineUps([[3, 2], [5, 3], [7, 4]], { cadets: true, label: 'Rows of 3: 2 cadets left over. Rows of 5: 3 left over. Rows of 7: 4 left over' }) },
+      { who: 'leo', mood: 'teach', text: 'Each group left over is a <b>remainder</b> clue: the number ÷ 3 leaves 2, ÷ 5 leaves 3 and ÷ 7 leaves 4. Start with the <b>biggest</b> divisor, 7, because its list has the fewest numbers to test. Start at 4, then add 7 each time: 4, 11, 18, 25, 32, …' },
+      { who: 'chloe', text: 'Now test them with the rows-of-5 clue. Which one leaves <b>3</b> when divided by 5?',
+        art: () => remTable([remRow(4, 5, 3), remRow(11, 5, 3), remRow(18, 5, 3)], ['Number', '÷ 5', 'r 3?']) },
+      { who: 'weiming', text: '<b>18</b> fits both clues! To find the next one, jump by <b>35</b>. 35 is a multiple of both 5 and 7, so adding 35 cadets just adds full rows of 5 and full rows of 7. The left-overs stay the same: 18, 53, 88, 123, 158, 193.',
+        art: () => hopLine({ start: 18, d: 35 }) },
+      { who: 'aisyah', text: 'Last clue: which of these leave <b>2</b> when divided by 3?',
+        art: () => remTable([18, 53, 88, 123, 158, 193].map(n => remRow(n, 3, 2)), ['Number', '÷ 3', 'r 2?']) },
+      { who: 'leo', mood: 'teach', text: '<b>53</b> is the smallest number that fits all three clues, and <b>158</b> is the next. They are 105 apart, because 3 × 5 × 7 = <b>105</b> is a common multiple of 3, 5 and 7. So the numbers that fit go 53, 158, 263, … Only <b>158</b> is between 150 and 200. The range picks the one answer!',
+        art: () => hopLine({ start: 53, d: 105, max: 300, good: [53, 158], faded: [263] }) },
+      { who: 'weiming', text: 'Let me check: 158 ÷ 3 = 52 r <b>2</b> ✓, 158 ÷ 5 = 31 r <b>3</b> ✓, 158 ÷ 7 = 22 r <b>4</b> ✓. Mr Gomes reports <b>158 cadets</b> in time for the march-past, and his head count a few minutes later agrees. Can lah!' },
     ],
   },
   keys: [
-    { title: 'Remainders are clues', text: '"In rows of 5, 2 are left over" means: the number ÷ 5 leaves a <b>remainder</b> of 2.' },
-    { title: 'List, then test', text: 'List the numbers that fit one clue (the <b>biggest</b> divisor gives the shortest list). Test each one against the other clues.' },
-    { title: 'Jump to the next one', text: 'If a number fits the clues for 3 and 5, adding 15 (a common multiple of 3 and 5) gives the next number that fits both.' },
+    { title: 'Remainders are clues', text: '"In rows of 5, 3 are left over" means: the number ÷ 5 leaves a <b>remainder</b> of 3.' },
+    { title: 'List, then test', text: 'List the numbers that fit one clue (the <b>biggest</b> divisor gives the shortest list). Test each one against the next clue.' },
+    { title: 'Jump, then use the range', text: 'Once a number fits two clues, add a <b>common multiple</b> to find the next one (for 5 and 7, jump by 35). The range then tells you which one is the answer.' },
     { title: 'All short by the same?', text: 'If every grouping is short by the same amount, the number is a common multiple minus that amount. ÷ 3 r 2 and ÷ 4 r 3: both are 1 short, so try 12 − 1 = 11.' },
   ],
   practice: [
@@ -483,13 +552,13 @@ const S2 = {
       template: '{0} lanterns', blanks: [{ answer: 89 }],
       hint: 'First find the numbers that fit the 3s and 5s clues (they go up in 15s). Then test them with ÷ 7.',
       solution: ['3s clue and 5s clue: both are 1 short, so the numbers are 15 − 1 = 14, then 29, 44, 59, 74, 89, … (jumps of 15).', 'Test with ÷ 7: 14 r 0, 29 r 1, 44 r 2, 59 r 3, 74 r 4, 89 r <b>5</b> ✓', 'The smallest number is <b>89</b> lanterns.', 'Check: 89 ÷ 3 = 29 r 2 ✓, 89 ÷ 5 = 17 r 4 ✓, 89 ÷ 7 = 12 r 5 ✓'] },
-    { id: 'i', level: 3, type: 'blanks', prompt: 'A school\'s marching contingent for the National Day Parade has between 100 and 200 pupils. In rows of 3, <b>1</b> is left over. In rows of 4, <b>1</b> is left over. In rows of 7, <b>none</b> are left over. How many pupils are in the contingent?',
+    { id: 'i', level: 3, type: 'blanks', prompt: 'For Deepavali, Priya\'s family and their neighbours set out between 100 and 200 clay oil lamps (diyas) at the void deck. In rows of 3, <b>1</b> lamp is left over. In rows of 4, <b>1</b> is left over. In rows of 7, <b>none</b> are left over. How many lamps are there?',
       art: lineUps([[3, 1], [4, 1], [7, 0]], { label: 'Rows of 3: 1 left over. Rows of 4: 1 left over. Rows of 7: none left over' }),
-      template: '{0} pupils', blanks: [{ answer: 133 }],
+      template: '{0} lamps', blanks: [{ answer: 133 }],
       hint: 'If 1 is left over in rows of 3 and in rows of 4, then the number is 1 more than a multiple of 12. List those numbers and test them with ÷ 7.',
       solution: ['1 left over in rows of 3 and of 4 means the number is 1 more than a common multiple of 3 and 4 (a multiple of 12): 13, 25, 37, 49, …', 'Test with ÷ 7: 13 ✗, 25 ✗, 37 ✗, 49 = 7 × 7 ✓', '49 is the smallest. Now jump by 12 × 7 = 84 to keep all the clues: 49, 133, 217, …', 'Only <b>133</b> is between 100 and 200.', 'Check: 133 ÷ 3 = 44 r 1 ✓, 133 ÷ 4 = 33 r 1 ✓, 133 ÷ 7 = 19 r 0 ✓'] },
   ],
-  adult: 'About the story: Han Xin (died 196 BC) was a real general of the early Han dynasty, but "Han Xin counts his soldiers" is a <b>legend</b>. The puzzle itself first appears in an ancient Chinese book, the <i>Sunzi Suanjing</i> (about 1600 years old), and today mathematicians call the idea the <b>Chinese Remainder Theorem</b>. Links to school work: division with remainders, multiples and common multiples are <b>within</b> P4. Solving several remainder clues at once is <b>enrichment</b> (olympiad style). Common mistakes: stopping after checking only one or two clues; jumping by the product of the divisors when a smaller common multiple works (for groups of 6 and 8, jump by 24, not 48); forgetting to use the given range to pick the answer. Tip: always start the list with the biggest divisor, because the list is shorter.',
+  adult: 'About the story: Kavitha, Mr Gomes and their contingent are made up, but the puzzle behind them is very old. "Find the number from its remainders" puzzles have been told in many cultures for well over a thousand years, and mathematicians call the idea the <b>Chinese Remainder Theorem</b>. Links to school work: listing multiples, finding <b>common multiples</b> (P4 factors and multiples) and <b>division with remainder</b> are <b>within</b> P4, and every step here uses only these. Question 1 needs nothing more. Combining two or three remainder clues at once (questions 2 to 9 and the story) is <b>enrichment</b> (olympiad style), though the short two-clue lists in questions 2 and 3 are a gentle first step. Why the jumps work: adding a common multiple of 5 and 7 adds whole rows of 5 and whole rows of 7, so the numbers left over do not change. Because 3, 5 and 7 have no common factor, the numbers that fit all three clues are exactly 105 apart, so a range narrower than 105 can hold only one answer. Common mistakes: stopping after checking only one or two clues; jumping by the product of the divisors when a smaller common multiple works (for groups of 6 and 8, jump by 24, not 48); forgetting to use the given range to pick the answer. Tip: always start the list with the biggest divisor, because the list is shorter, and finish by dividing the answer by every divisor to check each remainder.',
 };
 
 export default { t18, t19, S2 };

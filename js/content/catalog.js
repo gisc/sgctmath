@@ -31,7 +31,7 @@ export const UNITS = [
       { id: 't11', n: 11, title: 'Detective Logic Games' },
       { id: 't12', n: 12, title: 'Multiplication Digit Puzzles' },
       { id: 't13', n: 13, title: 'Division Digit Puzzles' },
-      { id: 'S1', n: 'Story', title: 'Maths Story: Tian Ji\'s Horse Race', feature: true },
+      { id: 'S1', n: 'Story', title: 'Maths Story: The Sports Day Relay Plan', feature: true },
     ] },
   { id: 5, part: 'A', title: 'Maths Modelling', icon: 'model', color: '#ff6b5b',
     topics: [
@@ -44,7 +44,7 @@ export const UNITS = [
       { id: 't17', n: 17, title: 'Excess and Shortage' },
       { id: 't18', n: 18, title: 'Matching Quantities' },
       { id: 't19', n: 19, title: 'Number Patterns with a Common Difference' },
-      { id: 'S2', n: 'Story', title: 'Maths Story: Han Xin Counts His Soldiers', feature: true },
+      { id: 'S2', n: 'Story', title: 'Maths Story: Counting the NDP Contingent', feature: true },
     ] },
   { id: 7, part: 'B', title: 'Work Backwards', icon: 'back', color: '#4aa8ff',
     topics: [{ id: 't20', n: 20, title: 'Working Backwards with Many Quantities' }] },
@@ -52,7 +52,7 @@ export const UNITS = [
     topics: [
       { id: 't21', n: 21, title: 'Chickens and Rabbits' },
       { id: 't22', n: 22, title: 'Trying Out Specific Numbers' },
-      { id: 'S3', n: 'Story', title: 'Maths Story: Descartes and the Grid', feature: true },
+      { id: 'S3', n: 'Story', title: 'Maths Story: Two Numbers, One Place (#05-12)', feature: true },
     ] },
   { id: 9, part: 'B', title: 'Addition Principle', icon: 'add', color: '#3dbb6b',
     topics: [{ id: 't23', n: 23, title: 'Page Number Problems' }] },

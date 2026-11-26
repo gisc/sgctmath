@@ -1,4 +1,4 @@
-# Independent verification for Unit 6 part B (t18 matching quantities, t19 patterns, S2 Han Xin).
+# Independent verification for Unit 6 part B (t18 matching quantities, t19 patterns, S2 Counting the NDP Contingent).
 # Answers are recomputed by brute-force search (prices in cents, masses in 100 g steps,
 # remainder puzzles by searching 1..N) or by generating the terms of each sequence,
 # then compared with the answer keys stored in js/content/unit6b.js.
@@ -84,9 +84,25 @@ ex.append(('t18 Wei Ming/Chloe -> puff, soya (cents)', unique([(p, s) for p in C
 ex.append(('t18 banner pens: 2p+b=460, 5p+b=820', unique([(p, b) for p in C for b in C if 2 * p + b == 460 and 5 * p + b == 820], 'x3')[0] * 3, 360))
 h = seq(12, 2, 15)
 ex.append(('t19 hall row 15, total, rows to 50', (h[-1], sum(h), next(n for n in range(1, 99) if seq(12, 2, n)[-1] == 50)), (40, 390, 20)))
-ex.append(('S2 smallest 3r1 5r2 7r3', min(n for n in range(1, N) if fits(n, [(3, 1), (5, 2), (7, 3)])), 52))
-ex.append(('S2 in 900..1000 (unique)', unique([n for n in range(900, 1001) if fits(n, [(3, 1), (5, 2), (7, 3)])], 'x4'), 997))
-ex.append(('S2 list 2 mod 5 & 1 mod 3 -> first', min(n for n in range(1, 99) if fits(n, [(5, 2), (3, 1)])), 7))
-ex.append(('S2 jump list 52+105k', [n for n in range(1, 1200) if fits(n, [(3, 1), (5, 2), (7, 3)])], [52, 157, 262, 367, 472, 577, 682, 787, 892, 997, 1102]))
+# S2 story: rows of 3 -> 2 left, rows of 5 -> 3 left, rows of 7 -> 4 left, between 150 and 200 cadets
+CL = [(3, 2), (5, 3), (7, 4)]
+ex.append(('S2 smallest fitting all three clues', min(n for n in range(1, N) if fits(n, CL)), 53))
+ex.append(('S2 in 150..200 (unique)', unique([n for n in range(150, 201) if fits(n, CL)], 'x4'), 158))
+ex.append(('S2 7-clue list starts', [n for n in range(0, 33) if n % 7 == 4], [4, 11, 18, 25, 32]))
+ex.append(('S2 first of 7-list fitting 5-clue', min(n for n in range(0, 99) if fits(n, [(7, 4), (5, 3)])), 18))
+ex.append(('S2 rows ÷5 table 4,11,18', [n % 5 for n in (4, 11, 18)], [4, 1, 3]))
+ex.append(('S2 5&7 fits up to 200 (jumps of 35)', [n for n in range(0, 201) if fits(n, [(7, 4), (5, 3)])], [18, 53, 88, 123, 158, 193]))
+ex.append(('S2 ...of those, ÷3 r2', [n for n in [18, 53, 88, 123, 158, 193] if n % 3 == 2], [53, 158]))
+ex.append(('S2 ÷3 table remainders', [n % 3 for n in [18, 53, 88, 123, 158, 193]], [0, 2, 1, 0, 2, 1]))
+ex.append(('S2 all fits up to 300 (jumps of 105)', [n for n in range(0, 301) if fits(n, CL)], [53, 158, 263]))
+ex.append(('S2 check 158: quotients & remainders', [divmod(158, d) for d in (3, 5, 7)], [(52, 2), (31, 3), (22, 4)]))
+ex.append(('S2 banner: 4 rows of 3 + 2 -> ÷3 r2', (4 * 3 + 2) % 3, 2))
+# practice solution claims
+ex.append(('S2/c list 30..40 r4 mod 5', [n for n in range(31, 40) if n % 5 == 4], [34, 39]))
+ex.append(('S2/e 22,46,70 fit 6r4 & 8r6', [n for n in range(1, 80) if fits(n, [(6, 4), (8, 6)])], [22, 46, 70]))
+ex.append(('S2/f ends in 7 list ÷8', [n % 8 for n in (107, 117, 127, 137, 147)], [3, 5, 7, 1, 3]))
+ex.append(('S2/h jumps of 15 ÷7', [n % 7 for n in (14, 29, 44, 59, 74, 89)], [0, 1, 2, 3, 4, 5]))
+ex.append(('S2/i fits list', [n for n in range(1, 250) if fits(n, [(3, 1), (4, 1), (7, 0)])], [49, 133, 217]))
 for name, got, exp in ex:
     print(f"{name:42s} {'OK' if got == exp else 'MISMATCH'} {got}")
+print(f"{len(ex)} explore/solution checks, {sum(got != exp for _, got, exp in ex)} mismatches")

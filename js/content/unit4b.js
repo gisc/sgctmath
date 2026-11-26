@@ -129,24 +129,6 @@ function card(x, y, n, c = '#ff6b5b', s = 1) {
     <text x="26" y="47" text-anchor="middle" ${HEAD} font-size="28" fill="${c}">${n}</text></g>`;
 }
 
-/* ---------- horse (side view, facing right) ---------- */
-function horse(x, y, s = 1, { c = '#c98b55', mane = '#5a3a22', cloth = null, flip = false, run = true } = {}) {
-  const leg = (lx, ly, a) => `<g transform="translate(${lx} ${ly}) rotate(${a})"><rect x="-5.5" y="-4" width="11" height="48" rx="5" fill="${c}" stroke="${A.ink}" stroke-width="2.6"/><rect x="-7" y="40" width="14" height="9" rx="3" fill="${A.ink}"/></g>`;
-  const [a1, a2, a3, a4] = run ? [28, -8, -26, 14] : [0, 0, 0, 0];
-  return `<g transform="translate(${x} ${y}) scale(${flip ? -s : s} ${s})">
-    <path d="M-44 -10 q-26 0 -32 34 q16 -6 24 -14 q-2 -10 8 -20z" fill="${mane}" stroke="${A.ink}" stroke-width="2.6" stroke-linejoin="round"/>
-    ${leg(-30, 12, a1)}${leg(26, 12, a3)}
-    <ellipse cx="0" cy="0" rx="48" ry="24" fill="${c}" stroke="${A.ink}" stroke-width="3"/>
-    ${leg(-18, 14, a2)}${leg(36, 12, a4)}
-    ${cloth ? `<path d="M-22 -22 h34 l-2 34 h-30z" fill="${cloth}" stroke="${A.ink}" stroke-width="2.6" stroke-linejoin="round"/><path d="M-18 4 h26" stroke="#fff" stroke-width="3" opacity=".7"/>` : ''}
-    <path d="M26 -14 q8 -26 26 -42 l20 12 q-12 20 -14 42 q-16 6 -32 -12z" fill="${c}" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M50 -62 q14 -10 26 0 l18 22 q5 9 -4 14 q-9 4 -16 -3 l-24 -14z" fill="${c}" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M56 -62 l2 -14 l10 12z" fill="${c}" stroke="${A.ink}" stroke-width="2.6" stroke-linejoin="round"/>
-    <path d="M48 -60 q-14 10 -18 30 q-4 12 -8 18 q14 -4 20 -18 q4 -16 12 -24z" fill="${mane}" stroke="${A.ink}" stroke-width="2.4" stroke-linejoin="round"/>
-    <circle cx="70" cy="-50" r="3.2" fill="${A.ink}"/><circle cx="88" cy="-30" r="2" fill="${A.ink}"/></g>`;
-}
-const flag = (x, y, c, t) => `<path d="M${x} ${y} v-70" stroke="${A.ink}" stroke-width="4" stroke-linecap="round"/><path d="M${x} ${y - 70} h40 l-10 13 l10 13 h-40z" fill="${c}" stroke="${A.ink}" stroke-width="2.5" stroke-linejoin="round"/><text x="${x + 15}" y="${y - 51}" text-anchor="middle" ${HEAD} font-size="14" fill="#fff">${t}</text>`;
-
 /* ---------- tables ---------- */
 const factTable = (k, hits) => `<table class="tbl"><tbody>${[0, 3, 6].map(r => `<tr>${[1, 2, 3].map(c => r + c).map(i => `<td style="white-space:nowrap;padding:4px 8px" class="${hits.includes(i) ? 'hl' : ''}">${k} × ${i} = ${k * i}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 
@@ -338,104 +320,195 @@ const t13 = {
   adult: 'Links to school work: P4 division of up to 4-digit numbers by a 1-digit number, with remainders. Question 8 uses a 2-digit divisor, which is <b>enrichment</b> (not in the primary long-division syllabus); question 9 uses the P5/P6 bar-model "units" idea. Digit puzzles in general are <b>enrichment</b>. Common mistakes: allowing a remainder that is as big as the divisor, and forgetting that a brought-down digit must match the digit at the top of its column. Tip: after solving, always check with quotient × divisor + remainder = dividend.',
 };
 
-/* ===================== Maths Story: Tian Ji's Horse Race ===================== */
-const TJ = '#2f6fd6', KG = '#e0282e';
-const matchTable = (rows, caption = '') => `<table class="tbl" style="font-size:15px"><thead><tr><th style="padding:4px 6px">Race</th><th style="padding:4px 6px">King</th><th style="padding:4px 6px">Tian Ji</th><th style="padding:4px 6px">Winner</th></tr></thead><tbody>${rows.map((r, i) => `<tr><td style="padding:4px 6px">${i + 1}</td><td style="padding:4px 6px">${r[0]}</td><td style="padding:4px 6px">${r[1]}</td><td style="padding:4px 6px" class="${r[2] === 'Tian Ji' ? 'hl' : ''}">${r[2]}</td></tr>`).join('')}</tbody></table>${caption ? `<small>${caption}</small>` : ''}`;
-const ordersTable = () => {
-  const names = { F: 'fast', M: 'medium', S: 'slow' };
-  const beats = { F: ['M', 'S'], M: ['S'], S: [] };     // Tian Ji's horse → king's horses it beats
-  const king = ['F', 'M', 'S'];
-  const perms = [['F', 'M', 'S'], ['F', 'S', 'M'], ['M', 'F', 'S'], ['M', 'S', 'F'], ['S', 'F', 'M'], ['S', 'M', 'F']];
-  const rows = perms.map(p => { const w = p.map((h, i) => beats[h].includes(king[i])); const n = w.filter(Boolean).length; return `<tr><td style="padding:4px 6px">${p.map((h, i) => `${names[h]}${w[i] ? ' ✓' : ''}`).join(' · ')}</td><td style="padding:4px 6px" class="${n >= 2 ? 'hl' : ''}">${n}</td></tr>`; }).join('');
-  return `<table class="tbl" style="font-size:15px"><thead><tr><th style="padding:4px 6px">Tian Ji's horses vs the king's fast · medium · slow</th><th style="padding:4px 6px">Wins</th></tr></thead><tbody>${rows}</tbody></table>`;
+/* ===================== Maths Story: The Sports Day Relay Plan ===================== */
+const BLU = '#2f6fd6', RED = '#e0282e', TRACK = '#e07a5f';
+// The runners. Times are each runner's best 100 m leg time in seconds (smaller = faster).
+const S1RED = [['Daniel', 15.2], ['Nurul', 16.4], ['Ravi', 17.6]];          // Red House's posted order, legs 1 to 3
+const S1BLUE = [['Hafiz', 15.6], ['Mei Ling', 16.8], ['Jun Jie', 18.0]];    // Blue House runners, fastest first
+const S1COL = { Hafiz: '#0f9d94', 'Mei Ling': '#7b61ff', 'Jun Jie': '#f2a516' };
+const sec = t => `${t.toFixed(1)} s`;
+const RUNNER = {
+  hafiz: { skin: '#c98e66', hair: 'short', hairC: '#1d1716', shirt: BLU, bottom: '#f4f6fb' },
+  daniel: { skin: '#f0c9a4', hair: 'curly', hairC: '#6b4a2e', shirt: RED, bottom: '#f4f6fb' },
 };
+const baton = (x, y, c = '#ffc94a', rot = -30) => `<rect x="${x - 4}" y="${y - 14}" width="8" height="28" rx="4" transform="rotate(${rot} ${x} ${y})" fill="${c}" stroke="${A.ink}" stroke-width="2.5"/>`;
+const speedLines = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9"><path d="M0 0 h-26"/><path d="M4 14 h-34"/><path d="M0 28 h-22"/></g>`;
+function bunting(y, w = 360, n = 14) {
+  const cols = [BLU, RED, '#ffc94a', '#3dbb6b'];
+  let g = `<path d="M0 ${y} Q${w / 2} ${y + 22} ${w} ${y}" fill="none" stroke="${A.ink}" stroke-width="2.5"/>`;
+  for (let i = 0; i < n; i++) {
+    const t = (i + .5) / n, x = t * w, yy = y + 44 * t * (1 - t);
+    g += `<path d="M${x - 9} ${yy} h18 l-9 18z" fill="${cols[i % 4]}" stroke="${A.ink}" stroke-width="2" stroke-linejoin="round"/>`;
+  }
+  return g;
+}
+function tent(x, y, w, c, label) {
+  return `<rect x="${x + 6}" y="${y + 26}" width="7" height="112" fill="#9aa4b5" stroke="${A.ink}" stroke-width="2.5"/><rect x="${x + w - 13}" y="${y + 26}" width="7" height="112" fill="#9aa4b5" stroke="${A.ink}" stroke-width="2.5"/>
+    <path d="M${x} ${y + 30} l18 -30 h${w - 36} l18 30z" fill="${c}" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M${x} ${y + 30} ${[...Array(6)].map((_, i) => `q${w / 12} 12 ${w / 6} 0`).join(' ')}" fill="${c}" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/>
+    <text x="${x + w / 2}" y="${y + 22}" text-anchor="middle" ${HEAD} font-size="13" fill="#fff">${label}</text>`;
+}
+function trophy(x, y, s = 1) {
+  return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-16 -40 h32 v10 q0 22 -16 26 q-16 -4 -16 -26z" fill="#ffc94a" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M-16 -34 q-14 0 -10 12 q3 7 12 6 M16 -34 q14 0 10 12 q-3 7 -12 6" fill="none" stroke="${A.ink}" stroke-width="3"/>
+    <rect x="-4" y="-5" width="8" height="10" fill="#f2a516" stroke="${A.ink}" stroke-width="2.5"/><rect x="-14" y="4" width="28" height="9" rx="3" fill="#c98b55" stroke="${A.ink}" stroke-width="2.5"/>
+    <path d="M-6 -32 q-2 10 2 18" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></g>`;
+}
+const flipX = (cx, inner) => `<g transform="translate(${cx * 2} 0) scale(-1 1)">${inner}</g>`;
+
+// One leg-by-leg result table. pairs: [[redIndex, blueName], …] in leg order.
+function legTable(blueOrder, caption = '') {
+  const B = Object.fromEntries(S1BLUE);
+  const rows = S1RED.map(([rn, rt], i) => {
+    const bn = blueOrder[i], bt = B[bn], blueWins = bt < rt;
+    return `<tr><td style="padding:4px 6px">${i + 1}</td><td style="padding:4px 6px;color:${RED}">${rn}<br><small>${sec(rt)}</small></td><td style="padding:4px 6px;color:${BLU}">${bn}<br><small>${sec(bt)}</small></td><td style="padding:4px 6px" class="${blueWins ? 'hl' : ''}">${blueWins ? 'Blue' : 'Red'}</td></tr>`;
+  }).join('');
+  return `<table class="tbl" style="font-size:15px"><thead><tr><th style="padding:4px 6px">Leg</th><th style="padding:4px 6px;color:${RED}">Red</th><th style="padding:4px 6px;color:${BLU}">Blue</th><th style="padding:4px 6px">Faster</th></tr></thead><tbody>${rows}</tbody></table>${caption ? `<small>${caption}</small>` : ''}`;
+}
+// All 6 Blue orders against Red's posted order, listed systematically (fix leg 1 first).
+const S1ORDERS = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]].map(p => p.map(i => S1BLUE[i][0]));
+function ordersTable() {
+  const B = Object.fromEntries(S1BLUE);
+  const rows = S1ORDERS.map(o => {
+    const w = o.map((n, i) => B[n] < S1RED[i][1]), n = w.filter(Boolean).length;
+    return `<tr>${o.map((nm, i) => `<td style="padding:4px 5px">${nm.replace(' ', '&nbsp;')}<br>${w[i] ? '✓' : '✗'}</td>`).join('')}<td style="padding:4px 5px" class="${n >= 2 ? 'hl' : ''}"><b>${n}</b></td></tr>`;
+  }).join('');
+  return `<table class="tbl" style="font-size:14px"><thead><tr>${S1RED.map(([rn], i) => `<th style="padding:4px 5px">Leg&nbsp;${i + 1}<br><small style="color:${RED}">vs ${rn}</small></th>`).join('')}<th style="padding:4px 5px">Legs<br>won</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+// Number line of all six times.
+function timeLine() {
+  const X = t => 30 + (t - 15) * 80;
+  let g = `<path d="M18 62 H322" stroke="${A.ink}" stroke-width="3" stroke-linecap="round"/>`;
+  for (let t = 15; t <= 18.5; t += .5) g += `<path d="M${X(t)} 56 v12" stroke="${A.ink}" stroke-width="2"/>`;
+  [15, 16, 17, 18].forEach(t => { g += `<text x="${X(t)}" y="${t === 15 ? 82 : 82}" text-anchor="middle" ${NUM} font-size="11" fill="#56627a">${t} s</text>`; });
+  S1RED.forEach(([n, t]) => { g += `<circle cx="${X(t)}" cy="62" r="7" fill="${RED}" stroke="${A.ink}" stroke-width="2.5"/><text x="${X(t)}" y="22" text-anchor="middle" ${NUM} font-size="12" fill="${RED}">${n}</text><text x="${X(t)}" y="38" text-anchor="middle" ${NUM} font-size="12" fill="${RED}">${t.toFixed(1)}</text>`; });
+  S1BLUE.forEach(([n, t]) => { g += `<circle cx="${X(t)}" cy="62" r="7" fill="${BLU}" stroke="${A.ink}" stroke-width="2.5"/><text x="${X(t)}" y="102" text-anchor="middle" ${NUM} font-size="12" fill="${BLU}">${t.toFixed(1)}</text><text x="${X(t)}" y="118" text-anchor="middle" ${NUM} font-size="12" fill="${BLU}">${n}</text>`; });
+  g += `<text x="18" y="140" ${NUM} font-size="12" fill="#0f7a73">◀ faster</text><text x="322" y="140" text-anchor="end" ${NUM} font-size="12" fill="#d6453a">slower ▶</text>`;
+  return svg('0 0 340 150', g, 'Number line of 100 m times: Daniel 15.2, Hafiz 15.6, Nurul 16.4, Mei Ling 16.8, Ravi 17.6, Jun Jie 18.0 seconds', 'style="max-width:380px"');
+}
+// Tree diagram of the 6 orders.
+function orderTree() {
+  const ini = { Hafiz: 'H', 'Mei Ling': 'M', 'Jun Jie': 'J' };
+  const chip = (x, y, n) => `<rect x="${x - 15}" y="${y - 13}" width="30" height="26" rx="8" fill="${S1COL[n]}" stroke="${A.ink}" stroke-width="2.5"/><text x="${x}" y="${y + 6}" text-anchor="middle" ${HEAD} font-size="16" fill="#fff">${ini[n]}</text>`;
+  const line = (x1, y1, x2, y2) => `<path d="M${x1 + 15} ${y1} L${x2 - 15} ${y2}" stroke="#9aa4b5" stroke-width="2.5" fill="none"/>`;
+  const RY = k => 52 + k * 32, X1 = 46, X2 = 136, X3 = 226;
+  let g = ['Leg 1', 'Leg 2', 'Leg 3'].map((t, i) => `<text x="${[X1, X2, X3][i]}" y="20" text-anchor="middle" ${HEAD} font-size="14" fill="${A.ink}">${t}</text>`).join('');
+  g += `<text x="298" y="20" text-anchor="middle" ${HEAD} font-size="14" fill="${A.ink}">Order</text>`;
+  for (let a = 0; a < 3; a++) {
+    const y1 = (RY(2 * a) + RY(2 * a + 1)) / 2;
+    for (let b = 0; b < 2; b++) {
+      const k = 2 * a + b, o = S1ORDERS[k], y = RY(k);
+      g += line(X1, y1, X2, y) + line(X2, y, X3, y) + chip(X2, y, o[1]) + chip(X3, y, o[2]);
+      g += `<text x="298" y="${y + 5}" text-anchor="middle" ${NUM} font-size="14" fill="#56627a">${o.map(n => ini[n]).join(' ')}</text>`;
+    }
+    g += chip(X1, y1, S1ORDERS[2 * a][0]);
+  }
+  g += `<text x="170" y="${RY(5) + 36}" text-anchor="middle" ${NUM} font-size="12" fill="#56627a">H = Hafiz · M = Mei Ling · J = Jun Jie</text>`;
+  g += `<text x="170" y="${RY(5) + 54}" text-anchor="middle" ${NUM} font-size="13" fill="${A.ink}">3 choices × 2 choices × 1 choice = 6 orders</text>`;
+  return svg(`0 0 340 ${RY(5) + 64}`, g, 'A tree diagram listing the 6 running orders for Hafiz, Mei Ling and Jun Jie', 'style="max-width:380px"');
+}
+
 const S1 = {
   id: 'S1',
-  title: 'Maths Story: Tian Ji\'s Horse Race',
-  intro: 'Can you win a race with <i>slower</i> horses? Over 2,000 years ago, a clever strategist in China showed how, just by changing the order!',
-  skills: ['Strategy', 'Listing all cases', 'Reasoning'],
-  art: () => svg('0 0 360 220', `<rect width="360" height="220" rx="20" fill="#fff4dd"/>
-    <path d="M30 60 q14 -4 22 -20 h72 q8 16 22 20z" fill="${KG}" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/><rect x="52" y="58" width="72" height="34" fill="#ffe3b3" stroke="${A.ink}" stroke-width="3"/><rect x="80" y="70" width="16" height="22" fill="#a86f3f"/>
-    <path d="M0 120 q180 -24 360 0 v100 h-360z" fill="#c7e9a6"/>
-    <path d="M0 150 q180 -20 360 0" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="14 10"/><path d="M0 194 q180 -16 360 0" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="14 10"/>
-    ${flag(236, 104, TJ, 'Tian')}${flag(298, 112, KG, 'King')}
-    ${horse(112, 140, .72, { c: '#f2c27a', mane: '#8a5a3c', cloth: KG })}
-    ${horse(196, 180, .72, { c: '#9b6a47', mane: '#3b2a1e', cloth: TJ })}
-    ${A.cloud(170, 18, .8)}`, 'Two horses racing on a track, one with a red cloth for the King and one with a blue cloth for Tian Ji'),
+  title: 'The Sports Day Relay Plan',
+  intro: 'Can a house with <i>slightly slower</i> runners still win the relay trophy? On Sports Day, Wei Ming finds a way, just by changing the running order!',
+  skills: ['Strategy', 'Listing all cases', 'Comparing decimals'],
+  art: () => svg('0 0 360 220', `<rect width="360" height="220" rx="20" fill="#e6f5ff"/>
+    ${A.cloud(150, 50, .7)}${A.cloud(250, 62, .55)}
+    ${A.hdb(14, 58, 60, 70, '#ffe3b3', 5)}${A.hdb(286, 48, 60, 80, '#d9e8ff', 6)}
+    ${bunting(12)}
+    <text x="180" y="70" text-anchor="middle" ${HEAD} font-size="24" fill="${BLU}">SPORTS DAY</text>
+    <rect x="0" y="118" width="360" height="102" fill="#8edb9f"/>
+    <path d="M0 150 Q180 124 360 150 V202 Q180 178 0 202z" fill="${TRACK}" stroke="${A.ink}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M0 176 Q180 151 360 176" fill="none" stroke="#fff" stroke-width="3"/>
+    <path d="M300 141 L306 193" stroke="#fff" stroke-width="6"/>
+    <rect x="296" y="96" width="6" height="52" fill="#9aa4b5" stroke="${A.ink}" stroke-width="2"/><path d="M299 100 l28 -6 v14 l-28 6z" fill="#fff" stroke="${A.ink}" stroke-width="2"/><text x="313" y="109" text-anchor="middle" ${NUM} font-size="9" fill="${A.ink}">FINISH</text>
+    ${speedLines(98, 116, .9)}<g transform="rotate(8 128 125)">${kid(RUNNER.hafiz, { x: 128, y: 92, s: .52, pose: 'wave' })}${baton(150, 95)}</g>
+    ${speedLines(198, 140, .9)}<g transform="rotate(8 228 149)">${kid(RUNNER.daniel, { x: 228, y: 116, s: .52, pose: 'wave', mood: 'think' })}${baton(250, 119)}</g>
+    ${leo({ x: 40, y: 152, s: .4, pose: 'wave' })}`, 'Sports Day: a Blue House runner and a Red House runner race with batons on a school track, with HDB flats, bunting and Leo cheering'),
   explore: {
     title: 'The Story',
-    setup: 'Long ago, in the state of Qi in ancient China, General <b>Tian Ji</b> liked to race horses against <b>King Wei of Qi</b>, usually for a big bet of gold.',
-    art: () => svg('0 0 340 320', `<rect width="340" height="320" rx="20" fill="#fff9ec"/>
-      <rect x="22" y="12" width="296" height="214" rx="14" fill="#fff" stroke="${A.ink}" stroke-width="3"/>
-      <rect x="10" y="6" width="16" height="226" rx="8" fill="#e0a51c" stroke="${A.ink}" stroke-width="3"/><rect x="314" y="6" width="16" height="226" rx="8" fill="#e0a51c" stroke="${A.ink}" stroke-width="3"/>
-      <text x="84" y="36" text-anchor="middle" ${HEAD} font-size="16" fill="${KG}">King's horses</text><text x="250" y="36" text-anchor="middle" ${HEAD} font-size="15" fill="${TJ}">Tian Ji's horses</text>
-      ${['fast', 'medium', 'slow'].map((t, i) => `${horse(66, 76 + i * 56, .3, { c: '#f2c27a', mane: '#8a5a3c', cloth: KG, run: false })}<text x="70" y="${104 + i * 56}" text-anchor="middle" ${NUM} font-size="12" fill="${A.ink}">${t}</text>`).join('')}
-      ${['fast', 'medium', 'slow'].map((t, i) => `${horse(274, 76 + i * 56, .3, { c: '#9b6a47', mane: '#3b2a1e', cloth: TJ, run: false, flip: true })}<text x="270" y="${104 + i * 56}" text-anchor="middle" ${NUM} font-size="12" fill="${A.ink}">${t}</text>`).join('')}
-      <g stroke-width="4" stroke-linecap="round" fill="none"><path d="M226 186 L112 74" stroke="#d6453a" stroke-dasharray="7 6"/><path d="M226 74 L112 130" stroke="#3dbb6b"/><path d="M226 130 L112 186" stroke="#3dbb6b"/></g>
-      <text x="170" y="218" text-anchor="middle" ${NUM} font-size="12" fill="#56627a">red: lose · green: win</text>
-      ${leo({ x: 100, y: 254, s: .4, pose: 'point' })}${kid('chloe', { x: 246, y: 252, s: .42, mood: 'think', pose: 'think' })}`, 'A scroll showing the King\'s and Tian Ji\'s fast, medium and slow horses, with lines showing Sun Bin\'s new matches'),
+    setup: 'It is Sports Day at Harmony Primary School! The last event is the <b>P4 House Relay</b>. Each house sends <b>3 runners</b>, one for each 100 m leg. The stopwatch team times every leg, and on each leg the house with the <b>faster</b> runner wins that leg. Win <b>2 of the 3 legs</b> and your house takes the trophy. Wei Ming is the <b>Blue House</b> captain. The <b>Red House</b> captain, Priya, has already pinned her running order on the board.',
+    art: () => svg('0 0 340 300', `<rect width="340" height="300" rx="20" fill="#e6f5ff"/>
+      <rect x="0" y="196" width="340" height="104" fill="#9edcaa"/>
+      <path d="M0 262 H340 V280 Q340 300 320 300 H20 Q0 300 0 280z" fill="${TRACK}"/><path d="M0 280 H340" stroke="#fff" stroke-width="3"/>
+      ${tent(-6, 54, 104, BLU, 'BLUE')}${tent(242, 54, 104, RED, 'RED')}
+      <rect x="104" y="140" width="8" height="70" fill="#a86f3f" stroke="${A.ink}" stroke-width="2.5"/><rect x="228" y="140" width="8" height="70" fill="#a86f3f" stroke="${A.ink}" stroke-width="2.5"/>
+      <rect x="90" y="14" width="160" height="134" rx="10" fill="#c98b55" stroke="${A.ink}" stroke-width="3"/>
+      <rect x="98" y="22" width="144" height="118" rx="5" fill="#fff"/>
+      <text x="170" y="40" text-anchor="middle" ${HEAD} font-size="13" fill="${A.ink}">P4 HOUSE RELAY</text>
+      <text x="166" y="60" text-anchor="middle" ${HEAD} font-size="12" fill="${RED}">RED</text><text x="219" y="60" text-anchor="middle" ${HEAD} font-size="12" fill="${BLU}">BLUE</text>
+      ${S1RED.map(([n], i) => `<text x="104" y="${84 + i * 22}" ${NUM} font-size="11" fill="#56627a">Leg ${i + 1}</text><text x="166" y="${84 + i * 22}" text-anchor="middle" ${NUM} font-size="12" fill="${RED}">${n}</text><rect x="205" y="${71 + i * 22}" width="28" height="17" rx="4" fill="#fff4d1" stroke="#f2a516" stroke-width="2" stroke-dasharray="4 3"/><text x="219" y="${84 + i * 22}" text-anchor="middle" ${NUM} font-size="12" fill="#7b61ff">?</text>`).join('')}
+      ${trophy(170, 226, .8)}
+      ${kid('weiming', { x: 52, y: 178, s: .66, mood: 'think', pose: 'think' })}
+      <g transform="rotate(-8 84 236)"><rect x="70" y="214" width="30" height="38" rx="4" fill="#c98b55" stroke="${A.ink}" stroke-width="2.5"/><rect x="75" y="222" width="20" height="26" fill="#fff"/><path d="M78 230 h14 M78 236 h14 M78 242 h10" stroke="#9aa4b5" stroke-width="2"/></g>
+      ${kid('aisyah', { x: 126, y: 188, s: .56, pose: 'wave' })}
+      ${flipX(290, leo({ x: 290, y: 184, s: .56, pose: 'point' }))}`, 'The P4 House Relay board shows Red House\'s order (Daniel, Nurul, Ravi) and three blanks for Blue House. Wei Ming thinks with a clipboard; Aisyah and Leo stand by the trophy and the house tents'),
     steps: [
-      { who: 'leo', text: 'Each side sent out <b>three</b> horses: a fast one, a medium one and a slow one. There were three races, and whoever won <b>two</b> races won the bet.' },
-      { who: 'weiming', mood: 'think', text: 'But the king\'s horses were each a little faster than Tian Ji\'s horse of the <b>same kind</b>. Racing fast against fast, medium against medium and slow against slow, Tian Ji lost every time!',
-        art: () => matchTable([['fast', 'fast', 'King'], ['medium', 'medium', 'King'], ['slow', 'slow', 'King']], 'Tian Ji loses 0 – 3.') },
-      { who: 'arjun', text: 'Tian Ji\'s friend, the strategist <b>Sun Bin</b>, noticed something: Tian Ji\'s <b>fast</b> horse could beat the king\'s <b>medium</b> horse, and Tian Ji\'s <b>medium</b> horse could beat the king\'s <b>slow</b> horse.' },
-      { who: 'leo', text: 'Sun Bin said: "Keep the same horses. Just change the order!" Race your <b>slow</b> horse against the king\'s fast horse. Then race your fast horse against his medium one, and your medium horse against his slow one.',
-        art: () => matchTable([['fast', 'slow', 'King'], ['medium', 'fast', 'Tian Ji'], ['slow', 'medium', 'Tian Ji']], 'Tian Ji wins 2 – 1 and wins the bet!') },
-      { who: 'chloe', mood: 'think', text: 'Is that the <b>only</b> way to win? Let\'s list all <b>6</b> orders for Tian Ji\'s horses and count the wins:', art: ordersTable },
-      { who: 'aisyah', text: 'Only <b>one</b> order wins! The trick: give up the race you can\'t win using your <b>weakest</b> player, so your other players each face someone they <b>can</b> beat. But it only works because Tian Ji knew the king\'s order first.' },
+      { who: 'weiming', mood: 'think', text: 'Our Blue runners are Hafiz, Mei Ling and Jun Jie. Theirs are Daniel, Nurul and Ravi. Each of ours is <b>a little slower</b> than their runner of the same rank. If fastest races fastest, second races second and third races third, we lose every leg!',
+        art: () => legTable(['Hafiz', 'Mei Ling', 'Jun Jie'], 'Blue loses 0 – 3.') },
+      { who: 'aisyah', text: 'Wait, let\'s put all six times on a number line. A <b>smaller</b> time means a <b>faster</b> runner. Hafiz (15.6 s) is faster than Nurul (16.4 s) <b>and</b> Ravi (17.6 s). Mei Ling (16.8 s) is faster than Ravi. Jun Jie can\'t beat anyone on Red.',
+        art: timeLine },
+      { who: 'leo', mood: 'teach', text: 'And Red\'s order is already on the board: Daniel, then Nurul, then Ravi. So <b>give up</b> Leg 1: send Jun Jie against Daniel. Then Hafiz runs against Nurul and Mei Ling runs against Ravi. Each of them is <b>just a little faster</b> than the runner they meet.',
+        art: () => legTable(['Jun Jie', 'Hafiz', 'Mei Ling'], 'Same runners, new order: Blue wins 2 – 1!') },
+      { who: 'arjun', mood: 'think', text: 'This only works because we saw Red\'s order <b>first</b>. If Priya could see our order before choosing hers, she would just put Daniel against Hafiz, Nurul against Mei Ling and Ravi against Jun Jie, and we would lose 0 – 3 again.' },
+      { who: 'chloe', mood: 'think', text: 'Is Leo\'s order the <b>only</b> one that wins? Let\'s list every order. Leg 1 has 3 choices, then Leg 2 has 2 runners left, then Leg 3 has 1. That\'s 3 × 2 × 1 = <b>6</b> orders.',
+        art: orderTree },
+      { who: 'leo', text: 'Now check all 6 against Red\'s Daniel · Nurul · Ravi. Only <b>one</b> order wins 2 legs: <b>Jun Jie, Hafiz, Mei Ling</b>. Listing every case in a table means you know you haven\'t missed a better plan!',
+        art: ordersTable },
     ],
   },
   keys: [
-    { title: 'The story', text: 'Same horses, new order: slow vs fast (lose), fast vs medium (win), medium vs slow (win). Tian Ji won 2 races to 1.' },
-    { title: 'Sacrifice the weakest', text: 'Use your weakest player against their strongest. Then each of your stronger players can face someone just a little weaker.' },
-    { title: 'List every order', text: '3 players can be arranged in 3 × 2 × 1 = <b>6</b> orders. List them all in a table so you don\'t miss any.' },
-    { title: 'Knowing comes first', text: 'The plan works only if you know your opponent\'s order <b>before</b> choosing yours. Information is power!' },
+    { title: 'The relay plan', text: 'Same runners, new order: Jun Jie vs Daniel (lose), Hafiz vs Nurul (win), Mei Ling vs Ravi (win). Blue wins 2 legs to 1. Remember: a <b>smaller</b> time is <b>faster</b>.' },
+    { title: 'Give up one, win two', text: 'Put your <b>weakest</b> against their <b>strongest</b>. Then each of your other players meets someone they can just beat.' },
+    { title: 'List every order', text: '3 runners can be arranged in 3 × 2 × 1 = <b>6</b> orders. Fix the first runner, then list the rest, so you don\'t miss any.' },
+    { title: 'Knowing comes first', text: 'The plan works only if you know the other side\'s order <b>before</b> you choose yours. If they see yours first, they can match you instead!' },
   ],
   practice: [
-    { id: 'a', level: 1, type: 'mcq', prompt: 'In Sun Bin\'s plan, which of the king\'s horses raced against Tian Ji\'s <b>slow</b> horse?',
-      options: ['The king\'s fast horse', 'The king\'s medium horse', 'The king\'s slow horse', 'None: the slow horse did not race'], answer: 0,
-      hint: 'Sun Bin gave up one race on purpose. Which race was Tian Ji sure to lose anyway?',
-      solution: 'Tian Ji\'s slow horse raced the king\'s <b>fast</b> horse. That race was lost, but it "used up" the king\'s best horse, so Tian Ji\'s fast and medium horses could win the other two races.' },
-    { id: 'b', level: 1, type: 'blanks', prompt: 'How many races did Tian Ji win when he raced fast against fast, medium against medium and slow against slow? How many did he win with Sun Bin\'s plan?',
-      template: 'Same kinds: {0} races &nbsp;&nbsp; Sun Bin\'s plan: {1} races', blanks: [{ answer: 0, size: 'sm' }, { answer: 2, size: 'sm' }],
-      hint: 'Each of the king\'s horses is a little faster than Tian Ji\'s horse of the same kind.',
-      solution: ['Same kinds: the king\'s horse is faster in every race, so Tian Ji wins <b>0</b>.', 'Sun Bin\'s plan: lose slow vs fast, win fast vs medium, win medium vs slow. Tian Ji wins <b>2</b>.'] },
-    { id: 'c', level: 1, type: 'blanks', prompt: 'The king always sends out his horses in the order fast, medium, slow. In how many different orders can Tian Ji send out his <b>3</b> horses?',
+    { id: 'a', level: 1, type: 'mcq', prompt: 'Nurul\'s best 100 m time is <b>16.4 s</b>. Which of these runners are <b>faster</b> than Nurul?',
+      options: ['Hafiz, 15.6 s', 'Mei Ling, 16.8 s', 'Daniel, 15.2 s', 'Ravi, 17.6 s', 'Jun Jie, 18.0 s'], answer: [0, 2],
+      hint: 'A faster runner takes <b>less</b> time. Which times are smaller than 16.4?',
+      solution: ['Faster means a <b>smaller</b> time, so look for times less than 16.4 s.', '15.6 &lt; 16.4 ✓ and 15.2 &lt; 16.4 ✓', '16.8, 17.6 and 18.0 are all more than 16.4 ✗', 'So <b>Hafiz and Daniel</b> are faster than Nurul.'] },
+    { id: 'b', level: 1, type: 'blanks', prompt: 'How many legs does Blue House win if Hafiz, Mei Ling and Jun Jie run against Daniel, Nurul and Ravi in that order? How many legs does Blue win with Leo\'s plan (Jun Jie, Hafiz, Mei Ling)?',
+      template: 'Fastest vs fastest: {0} legs &nbsp;&nbsp; Leo\'s plan: {1} legs', blanks: [{ answer: 0, size: 'sm' }, { answer: 2, size: 'sm' }],
+      hint: 'Compare the two times on each leg. The smaller time wins.',
+      solution: ['Fastest vs fastest: 15.6 &gt; 15.2, 16.8 &gt; 16.4, 18.0 &gt; 17.6. Red is faster on every leg, so Blue wins <b>0</b>.', 'Leo\'s plan: 18.0 &gt; 15.2 (lose), 15.6 &lt; 16.4 (win), 16.8 &lt; 17.6 (win). Blue wins <b>2</b>.'] },
+    { id: 'c', level: 1, type: 'blanks', prompt: 'Wei Ming writes Hafiz, Mei Ling and Jun Jie on three cards and tries every way to line them up for Legs 1, 2 and 3. How many different running orders are there?',
       template: '{0} orders', blanks: [{ answer: 6, size: 'sm' }],
-      hint: 'How many choices are there for the first race? Then for the second race? Then the third?',
-      solution: ['First race: 3 choices. Second race: 2 horses are left. Third race: 1 horse is left.', '3 × 2 × 1 = <b>6</b> orders: FMS, FSM, MFS, MSF, SFM, SMF (F = fast, M = medium, S = slow).'] },
-    { id: 'd', level: 2, type: 'blanks', prompt: 'Look at all 6 orders. In how many of them does Tian Ji win <b>at least 2</b> races? (Remember: his fast horse beats the king\'s medium and slow horses, and his medium horse beats only the king\'s slow horse. His slow horse beats none of the king\'s horses.)',
+      hint: 'How many runners can he choose for Leg 1? How many are left for Leg 2? And for Leg 3?',
+      solution: ['Leg 1: 3 choices. Leg 2: 2 runners are left. Leg 3: 1 runner is left.', '3 × 2 × 1 = <b>6</b> orders: HMJ, HJM, MHJ, MJH, JHM, JMH (H = Hafiz, M = Mei Ling, J = Jun Jie).'] },
+    { id: 'd', level: 2, type: 'blanks', prompt: 'Red runs Daniel (15.2 s), Nurul (16.4 s), Ravi (17.6 s) in that order. Blue has Hafiz (15.6 s), Mei Ling (16.8 s) and Jun Jie (18.0 s). Of Blue\'s 6 possible orders, in how many does Blue win <b>at least 2</b> legs?',
       template: '{0} orders', blanks: [{ answer: 1, size: 'sm' }],
-      hint: 'Make a table of the 6 orders. For each race, decide who wins.',
-      solution: ['List every order against the king\'s fast · medium · slow:', ordersTable(), 'Only <b>1</b> order (slow, fast, medium) wins 2 races. Every other order wins 1 race at most.'] },
-    { id: 'e', level: 2, type: 'mcq', prompt: 'The king finds out about the trick. Next time, he insists on seeing Tian Ji\'s order <b>first</b>, and then chooses his own order. What is the greatest number of races Tian Ji can be <b>sure</b> to win?',
+      hint: 'Make a table of all 6 orders. On each leg, the smaller time wins.',
+      solution: ['List every order against Red\'s Daniel · Nurul · Ravi:', ordersTable(), 'Only <b>1</b> order (Jun Jie, Hafiz, Mei Ling) wins 2 legs. Every other order wins at most 1 leg.'] },
+    { id: 'e', level: 2, type: 'mcq', prompt: 'Next year, Priya hands in Red\'s order <b>last</b>, after she has seen Blue\'s order on the board. The runners and their times are the same. What is the greatest number of legs Blue can be <b>sure</b> to win?',
       options: ['0', '1', '2', '3'], answer: 0,
-      hint: 'If you could see your opponent\'s order first, how would you match your horses?',
-      solution: ['Whatever order Tian Ji chooses, the king can race fast vs fast, medium vs medium and slow vs slow.', 'Each of the king\'s horses beats Tian Ji\'s horse of the same kind, so Tian Ji can be sure of <b>0</b> wins.', 'The trick works only for the side that knows the other side\'s order first!'] },
-    { id: 'f', level: 2, type: 'blanks', prompt: 'At the inter-school Chess Challenge at the community centre, Sunrise Primary puts its <b>strongest</b> player on Board 1, its second-strongest on Board 2 and its third-strongest on Board 3. A win on Board 1 earns <b>3 points</b>, on Board 2 <b>2 points</b> and on Board 3 <b>1 point</b>.<br>Our school\'s team: Ravi is a little weaker than their strongest player but stronger than their second-strongest. Mei Ling is a little weaker than their second-strongest but stronger than their third-strongest. Farah is a little weaker than their third-strongest. What is the <b>greatest</b> number of points our team can earn?',
-      template: '{0} points', blanks: [{ answer: 3, size: 'sm' }],
-      hint: 'Nobody in our team can beat Board 1. Who should we "give up" there?',
-      solution: ['No one in our team can beat their strongest player, so the 3 points on Board 1 are lost anyway. Send Farah (our weakest) there.', 'Board 2: Ravi beats their second-strongest → 2 points.', 'Board 3: Mei Ling beats their third-strongest → 1 point.', 'Total: 2 + 1 = <b>3 points</b>, the most possible, since Board 1 cannot be won.'] },
-    { id: 'g', level: 2, type: 'mcq', prompt: 'While visiting Chloe\'s family at Chinese New Year, Hafiz and Chloe play "higher card wins". Hafiz lays down his cards in this order: <b>7</b>, then <b>4</b>, then <b>11</b>. Chloe holds <b>12</b>, <b>8</b> and <b>5</b>, and plays one card against each of his. In which order should Chloe play to win <b>all three</b> rounds?',
-      art: svg('0 0 300 200', `<text x="0" y="44" ${NUM} font-size="16" fill="${A.ink}">Hafiz</text>${[7, 4, 11].map((n, i) => card(84 + i * 74, 4, n, TJ)).join('')}
+      hint: 'If you could see the other house\'s order first, how would you match your runners?',
+      solution: ['Whatever order Blue chooses, Priya can put Daniel against Hafiz, Nurul against Mei Ling and Ravi against Jun Jie.', 'Each Red runner is faster than the Blue runner they meet, so Blue can be sure of only <b>0</b> legs.', 'The trick works only for the side that sees the other side\'s order first!'] },
+    { id: 'f', level: 2, type: 'mcq', prompt: 'At Chinese New Year, Arjun visits Chloe\'s family and they play "higher card wins". Arjun lays down his cards in this order: <b>7</b>, then <b>4</b>, then <b>11</b>. Chloe holds <b>12</b>, <b>8</b> and <b>5</b>, and plays one card against each of his. In which order should Chloe play to win <b>all three</b> rounds?',
+      art: svg('0 0 300 200', `<text x="0" y="44" ${NUM} font-size="16" fill="${A.ink}">Arjun</text>${[7, 4, 11].map((n, i) => card(84 + i * 74, 4, n, BLU)).join('')}
         ${['round 1', 'round 2', 'round 3'].map((t, i) => `<text x="${110 + i * 74}" y="98" text-anchor="middle" ${NUM} font-size="13" fill="#56627a">${t}</text>`).join('')}
-        <text x="0" y="158" ${NUM} font-size="16" fill="${A.ink}">Chloe</text><text x="0" y="178" ${NUM} font-size="12" fill="#56627a">(any order)</text>${[12, 8, 5].map((n, i) => card(84 + i * 74, 116, n, KG)).join('')}`, 'Hafiz plays 7, then 4, then 11; Chloe holds 12, 8 and 5', 'style="max-width:300px"'),
+        <text x="0" y="158" ${NUM} font-size="16" fill="${A.ink}">Chloe</text><text x="0" y="178" ${NUM} font-size="12" fill="#56627a">(any order)</text>${[12, 8, 5].map((n, i) => card(84 + i * 74, 116, n, RED)).join('')}`, 'Arjun plays 7, then 4, then 11; Chloe holds 12, 8 and 5', 'style="max-width:300px"'),
       options: ['12, 8, 5', '8, 5, 12', '5, 8, 12', '12, 5, 8'], answer: 1,
-      hint: 'Which of Hafiz\'s cards is the hardest to beat? Only one of Chloe\'s cards can beat it. Then use the smallest card that still wins each other round.',
-      solution: ['Only Chloe\'s 12 beats Hafiz\'s 11, so save the 12 for round 3.', 'Round 1 (Hafiz 7): the 8 wins. Round 2 (Hafiz 4): the 5 wins.', 'So Chloe plays <b>8, 5, 12</b> and wins all three rounds: 8 &gt; 7, 5 &gt; 4, 12 &gt; 11.', 'Playing 12 first "wastes" it on a card that the 8 could have beaten.'] },
-    { id: 'h', level: 3, type: 'blanks', prompt: 'Same cards as before: Hafiz plays <b>7, 4, 11</b> in that order, and Chloe holds <b>12, 8, 5</b>. Chloe could play her cards in 6 different orders. In how many of these orders does she win <b>at least 2</b> rounds?',
+      hint: 'Which of Arjun\'s cards is the hardest to beat? Only one of Chloe\'s cards can beat it. Then use the smallest card that still wins each other round.',
+      solution: ['Only Chloe\'s 12 beats Arjun\'s 11, so save the 12 for round 3.', 'Round 1 (Arjun 7): the 8 wins. Round 2 (Arjun 4): the 5 wins.', 'So Chloe plays <b>8, 5, 12</b> and wins all three rounds: 8 &gt; 7, 5 &gt; 4, 12 &gt; 11.', 'Playing 12 first "wastes" it on a card that the 8 could have beaten.'] },
+    { id: 'g', level: 3, type: 'blanks', prompt: 'Same cards as before: Arjun plays <b>7, 4, 11</b> in that order, and Chloe holds <b>12, 8, 5</b>. Chloe could play her cards in 6 different orders. In how many of these orders does she win <b>at least 2</b> rounds?',
       template: '{0} orders', blanks: [{ answer: 5, size: 'sm' }],
       hint: 'List all 6 orders in a table and mark each round ✓ or ✗.',
-      solution: ['Against Hafiz\'s 7 · 4 · 11:',
+      solution: ['Against Arjun\'s 7 · 4 · 11:',
         '<table class="tbl"><thead><tr><th>Chloe plays</th><th>Rounds won</th></tr></thead><tbody><tr><td>12 ✓ · 8 ✓ · 5 ✗</td><td class="hl">2</td></tr><tr><td>12 ✓ · 5 ✓ · 8 ✗</td><td class="hl">2</td></tr><tr><td>8 ✓ · 12 ✓ · 5 ✗</td><td class="hl">2</td></tr><tr><td>8 ✓ · 5 ✓ · 12 ✓</td><td class="hl">3</td></tr><tr><td>5 ✗ · 12 ✓ · 8 ✗</td><td>1</td></tr><tr><td>5 ✗ · 8 ✓ · 12 ✓</td><td class="hl">2</td></tr></tbody></table>',
-        'So <b>5</b> of the 6 orders win at least 2 rounds. Only playing the 5 against the 7 and keeping the 12 away from the 11 loses.'] },
-    { id: 'i', level: 3, type: 'blanks', prompt: 'Sports Day "pair race": the Red House and the Blue House each send <b>4</b> runners. Each Blue runner races one Red runner, and the faster runner (the <b>smaller</b> time) wins. Red has announced its order (from race 1 to race 4) and Blue may choose its own. What is the <b>greatest</b> number of races Blue can win?',
-      art: `<table class="tbl"><thead><tr><th>Team</th><th colspan="4">80 m times in seconds (Red: races 1 to 4 in order)</th></tr></thead><tbody><tr><th style="color:${KG}">Red</th><td>11.8</td><td>12.6</td><td>13.4</td><td>14.5</td></tr><tr><th style="color:${TJ}">Blue<br><small>(any order)</small></th><td>12.2</td><td>13.0</td><td>13.9</td><td>14.8</td></tr></tbody></table>`,
+        'So <b>5</b> of the 6 orders win at least 2 rounds. Only the order 5, 12, 8 loses: it wastes the 12 on Arjun\'s 4 and leaves the 8 to face the 11.'] },
+    { id: 'h', level: 3, type: 'blanks', prompt: 'At the inter-school Chess Challenge at the community centre, Sunrise Primary puts its <b>strongest</b> player on Board 1, its second-strongest on Board 2 and its third-strongest on Board 3. A win on Board 1 earns <b>3 points</b>, on Board 2 <b>2 points</b> and on Board 3 <b>1 point</b>.<br>Our school\'s team: Kumar is a little weaker than their strongest player but stronger than their second-strongest. Siti is a little weaker than their second-strongest but stronger than their third-strongest. Marcus is a little weaker than their third-strongest. The stronger player always wins. What is the <b>greatest</b> number of points our team can earn?',
+      template: '{0} points', blanks: [{ answer: 3, size: 'sm' }],
+      hint: 'Can anyone in our team beat their Board 1 player? If not, who should we "give up" there?',
+      solution: ['No one in our team can beat their strongest player, so the 3 points on Board 1 are lost anyway. Send Marcus (our weakest) there.', 'Board 2: Kumar beats their second-strongest → 2 points.', 'Board 3: Siti beats their third-strongest → 1 point.', 'Total: 2 + 1 = <b>3 points</b>. That is the most possible, because Board 1 cannot be won and Boards 2 and 3 are both won.'] },
+    { id: 'i', level: 3, type: 'blanks', prompt: 'At the Track and Field CCA\'s year-end games, the Green team and the Yellow team each send <b>4</b> runners. Each Yellow runner races one Green runner over 80 m, and the faster runner (the <b>smaller</b> time) wins. Green has announced its order (from race 1 to race 4), and Yellow may then choose its own. What is the <b>greatest</b> number of races Yellow can win?',
+      art: `<table class="tbl"><thead><tr><th>Team</th><th colspan="4">80 m times in seconds</th></tr></thead><tbody><tr><th style="color:#1f8a4c">Green<br><small>(races 1 to 4)</small></th><td>11.8</td><td>12.6</td><td>13.4</td><td>14.5</td></tr><tr><th style="color:#b77a00">Yellow<br><small>(any order)</small></th><td>12.2</td><td>13.0</td><td>13.9</td><td>14.8</td></tr></tbody></table>`,
       template: '{0} races', blanks: [{ answer: 3, size: 'sm' }],
-      hint: 'A smaller time is faster. Can any Blue runner beat 11.8 s? If not, who should run against that Red runner?',
-      solution: ['No Blue runner is faster than 11.8 s, so race 1 is lost whatever happens. Use Blue\'s slowest runner (14.8 s) there, just like Tian Ji\'s slow horse.', 'Race 2 (12.6 s): 12.2 s wins. Race 3 (13.4 s): 13.0 s wins. Race 4 (14.5 s): 13.9 s wins.', 'Blue wins <b>3</b> races. Winning all 4 is impossible, because nobody can beat 11.8 s.'] },
+      hint: 'A smaller time is faster. Can any Yellow runner beat 11.8 s? If not, who should run against that Green runner?',
+      solution: ['No Yellow runner is faster than 11.8 s, so race 1 is lost whatever happens. Use Yellow\'s slowest runner (14.8 s) there, just like Jun Jie in Wei Ming\'s plan.', 'Race 2 (12.6 s): 12.2 s wins. Race 3 (13.4 s): 13.0 s wins. Race 4 (14.5 s): 13.9 s wins.', 'Yellow wins <b>3</b> races. Winning all 4 is impossible, because nobody can beat 11.8 s.'] },
   ],
-  adult: 'This "Maths Story" retells a famous episode recorded by the Han dynasty historian Sima Qian: General Tian Ji, King Wei of Qi and the strategist Sun Bin (4th century BC). The maths behind it is <b>enrichment</b>: listing all arrangements (3 × 2 × 1 = 6) and comparing outcomes systematically. Common mistakes: counting only some orders, and forgetting that the strategy depends on knowing the opponent\'s order first (question 5). Ask your child: "When is it wise to give up one small thing to win something bigger?"',
+  adult: 'This "Maths Story" is an original Singapore story built on a classic strategy puzzle: when you know your opponent\'s order, put your weakest player against their strongest, so that each of your other players meets someone just a little weaker. The maths is <b>enrichment</b>: listing all arrangements systematically (3 × 2 × 1 = 6, often shown as a tree diagram or table) and comparing outcomes. Counting arrangements is not in the primary MOE syllabus, but the page practises P4 skills: <b>comparing and ordering decimals</b> (a smaller time is a faster runner), and organised listing. Common mistakes: assuming a bigger time is faster, listing some orders twice or missing some (fix the first runner, then list the rest), and forgetting that the plan depends on seeing the other side\'s order first (question 5). Ask your child: "When is it wise to give up one small thing to win something bigger?" and "Why do real sports days usually collect both houses\' orders at the same time?"',
 };
 
 // Puzzle specs used by tools/verify/unit4b.py (the explore puzzles; practice puzzles carry their own `puz`).

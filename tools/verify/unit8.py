@@ -79,16 +79,9 @@ check('t22', 'h', [day])
 kumar = 1 / (F(1, 4) - F(1, 6)); check('t22', 'i', [int(kumar)])
 
 # ---------------- S3 ----------------
-ZOO = {(2, 5): 'Orangutans', (3, 6): 'Tigers', (6, 3): 'Elephants', (5, 1): 'Giraffes', (1, 2): 'Kiosk'}
-check('S3', 'a', options['S3']['a'].index(ZOO[(6, 3)]))
-check('S3', 'b', list(next(k for k, v in ZOO.items() if v == 'Giraffes')))
-ST = {'A': (0, 4), 'B': (4, 0), 'C': (4, 4), 'D': (2, 2)}
-check('S3', 'c', options['S3']['c'].index(next(k for k, v in ST.items() if v == (4, 0))))
-SEN = {'Beach Station': (1, 1), 'Fort Siloso': (1, 6), 'Luge': (4, 4), 'Aquarium': (6, 6), 'Palawan Beach': (5, 1), 'Tanjong Beach': (8, 2)}
-x, y = SEN['Beach Station']; check('S3', 'd', [x + 3, y + 3], f"-> {[k for k, v in SEN.items() if v == (x + 3, y + 3)]}")
-# e: BFS shortest path along grid lines on a 9x7 grid
 from collections import deque
 def bfs(a, b, W, Hh):
+    """Shortest number of unit steps along grid lines from a to b on a W x Hh grid."""
     d = {a: 0}; q = deque([a])
     while q:
         p = q.popleft()
@@ -96,19 +89,51 @@ def bfs(a, b, W, Hh):
             n = (p[0] + dx, p[1] + dy)
             if 0 <= n[0] <= W and 0 <= n[1] <= Hh and n not in d: d[n] = d[p] + 1; q.append(n)
     return d[b]
-check('S3', 'e', [bfs(SEN['Fort Siloso'], SEN['Tanjong Beach'], 9, 7) * 100])
-# f: count unit squares inside rectangle and perimeter by walking the edge
+def squares(x0, y0, x1, y1):
+    """Unit squares inside the rectangle with opposite corners (x0, y0), (x1, y1), counted one by one."""
+    return {(i, j) for i in range(min(x0, x1), max(x0, x1)) for j in range(min(y0, y1), max(y0, y1))}
+def perimeter(P):
+    return sum(abs(P[k][0] - P[(k + 1) % len(P)][0]) + abs(P[k][1] - P[(k + 1) % len(P)][1]) for k in range(len(P)))
+addr = lambda f, u: f"#{f:02d}-{u:02d}"
+
+# explore: #05-12 and #12-05 are different flats on the drawn block (floors 2..12, units 5..12)
+blk = {(f, u) for f in range(2, 13) for u in range(5, 13)}
+assert (5, 12) in blk and (12, 5) in blk and (5, 12) != (12, 5); print('OK  S3/explore: #05-12 and #12-05 both on the block, different flats')
+EST = {'Blk 123': (1, 1), 'Playground': (4, 3), 'Hawker centre': (3, 4)}
+assert EST['Playground'] != EST['Hawker centre'] and EST['Playground'] == EST['Hawker centre'][::-1]
+assert bfs(EST['Blk 123'], EST['Playground'], 6, 5) == 5; print('OK  S3/explore: Blk 123 -> playground shortest = 5 squares')
+assert len(squares(2, 1, 5, 3)) == 6; print('OK  S3/explore: fitness corner (2,1)-(5,3) covers 6 squares')
+
+# a: directly above #04-16 on Blk 305 (floors 2..8, units 14..18): one floor up, same unit
+B305 = {(f, u) for f in range(2, 9) for u in range(14, 19)}
+f, u = 4, 16; assert (f, u) in B305 and (f + 1, u) in B305
+check('S3', 'a', options['S3']['a'].index(addr(f + 1, u)), f'-> {addr(f + 1, u)}')
+assert len(set(options['S3']['a'])) == 4
+ZOO = {(2, 5): 'Orangutans', (3, 6): 'Tigers', (6, 3): 'Elephants', (5, 1): 'Giraffes', (1, 2): 'Kiosk'}
+check('S3', 'b', options['S3']['b'].index(ZOO[(6, 3)]))
+check('S3', 'c', list(next(k for k, v in ZOO.items() if v == 'Giraffes')))
+SEN = {'Beach Station': (1, 1), 'Fort Siloso': (1, 6), 'Luge': (4, 4), 'Aquarium': (6, 6), 'Palawan Beach': (5, 1), 'Tanjong Beach': (8, 2)}
+pos = SEN['Beach Station']
+for step in [(1, 0)] * 3 + [(0, 1)] * 3: pos = (pos[0] + step[0], pos[1] + step[1])
+check('S3', 'd', list(pos), f"-> {[k for k, v in SEN.items() if v == pos]}")
+d = bfs(SEN['Fort Siloso'], SEN['Tanjong Beach'], 9, 7)
+# the solution's drawn path must be a valid grid path of that shortest length
+path = [(1, 6), (1, 3), (8, 3), (8, 2)]
+assert path[0] == SEN['Fort Siloso'] and path[-1] == SEN['Tanjong Beach'] and all(a[0] == b[0] or a[1] == b[1] for a, b in zip(path, path[1:]))
+assert sum(abs(a[0] - b[0]) + abs(a[1] - b[1]) for a, b in zip(path, path[1:])) == d
+check('S3', 'e', [d * 100])
 P = [(2, 1), (7, 1), (7, 4), (2, 4)]
-area = sum(1 for i in range(10) for j in range(10) if 2 <= i < 7 and 1 <= j < 4)
-per = sum(abs(P[k][0] - P[(k + 1) % 4][0]) + abs(P[k][1] - P[(k + 1) % 4][1]) for k in range(4))
-check('S3', 'f', [area, per])
-sols = [(a, b) for a in range(10) for b in range(8) if a == b + 2 and a + b == 10]
-check('S3', 'g', list(unique(sols, 'S3g')))
+check('S3', 'f', [len(squares(2, 1, 7, 4)), perimeter(P)])
+# g: Blk 218 floors 2..12, units 41..46; flats in the rectangle with corners #03-42 and #10-45
+B218 = {(f, u) for f in range(2, 13) for u in range(41, 47)}
+rect = {(f, u) for (f, u) in B218 if 3 <= f <= 10 and 42 <= u <= 45}
+check('S3', 'g', [len({f for f, _ in rect}), len({u for _, u in rect}), len(rect)])
 pos = (0, 0)
 for dx, dy in ((3, 0), (0, 4), (2, 0), (0, -1), (-4, 0)):
     pos = (pos[0] + dx, pos[1] + dy); assert 0 <= pos[0] <= 6 and 0 <= pos[1] <= 5, 'robot leaves the drawn grid'
 check('S3', 'h', [pos[0], pos[1], bfs(pos, (0, 0), 6, 5)])
-grass = sum(1 for i in range(10) for j in range(10) if 1 <= i < 7 and 1 <= j < 5 and not (3 <= i < 5 and 2 <= j < 4))
-check('S3', 'i', [grass * 10 * 10])
+grass = squares(1, 1, 7, 5) - squares(3, 2, 5, 4)
+assert squares(3, 2, 5, 4) <= squares(1, 1, 7, 5)
+check('S3', 'i', [len(grass) * 10 * 10])
 
 print('\nALL OK' if bad == 0 else f'\n{bad} PROBLEMS')

@@ -175,37 +175,64 @@ report('t13/c', [min(ns), max(ns)] == Q['t13']['c']['answer'], f'computed={[min(
 cands = [(d, n) for d in range(1, 50) for n in range(1, 3000) if n // d == 47 and n % d == 5]
 report('t13/g', list(min(cands)) == Q['t13']['g']['answer'], f'computed={list(min(cands))} stored={Q["t13"]["g"]["answer"]}')
 
-# ---- S1: horses. speed ranks (bigger = faster). King slightly faster than Tian Ji in each class,
-# Tian Ji fast > King medium, Tian Ji medium > King slow.
-speed = {'KF': 6, 'TF': 5, 'KM': 4, 'TM': 3, 'KS': 2, 'TS': 1}
-king = ['KF', 'KM', 'KS']
-orders = list(permutations(['TF', 'TM', 'TS']))
-wins = lambda o: sum(speed[t] > speed[k] for t, k in zip(o, king))
+# ---- S1: Sports Day relay. Times in seconds; the smaller time wins a leg.
+RED = [('Daniel', 15.2), ('Nurul', 16.4), ('Ravi', 17.6)]          # Red's posted order, legs 1-3
+BLUE = {'Hafiz': 15.6, 'Mei Ling': 16.8, 'Jun Jie': 18.0}
+orders = list(permutations(BLUE))
+wins = lambda o: sum(BLUE[b] < r[1] for b, r in zip(o, RED))
 q = Q['S1']
-sun_bin = ('TS', 'TF', 'TM')
-report('S1/a', q['a']['answer'] == king.index(king[sun_bin.index('TS')]), f"slow horse met {king[sun_bin.index('TS')]}; stored option {q['a']['answer']}")
-report('S1/b', q['b']['answer'] == [wins(('TF', 'TM', 'TS')), wins(sun_bin)], f"computed={[wins(('TF','TM','TS')), wins(sun_bin)]} stored={q['b']['answer']}")
+# story set-up: each Blue runner is a little slower than the Red runner of the same rank
+rb = sorted(BLUE.values()); rr = sorted(t for _, t in RED)
+report('S1/setup', all(b > r for b, r in zip(rb, rr)) and len(orders) == 6, f'blue {rb} vs red {rr}, each blue slower; orders={len(orders)}')
+# explore: parse the rendered tables from the page and compare with enumeration
+EX = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
+  "import u from './js/content/unit4b.js'; console.log(JSON.stringify(u.S1.explore.steps.map(s => s.art ? s.art() : '')))"], cwd='/home/claude/sgctmath'))
+import re
+def leg_rows(html):
+    return [(m[0], m[1]) for m in re.findall(r'<tr><td[^>]*>\d</td><td[^>]*>[^<]*<br><small>[^<]*</small></td><td[^>]*>([^<]*)<br><small>[^<]*</small></td><td[^>]*>(Blue|Red)</td></tr>', html)]
+for k, order, want in ((0, ('Hafiz', 'Mei Ling', 'Jun Jie'), 0), (2, ('Jun Jie', 'Hafiz', 'Mei Ling'), 2)):
+    rows = leg_rows(EX[k]); shown = sum(w == 'Blue' for _, w in rows)
+    report(f'S1/explore step {k+1}', tuple(n for n, _ in rows) == order and shown == wins(order) == want,
+           f'order={order} shown Blue wins={shown} computed={wins(order)}')
+tbl = re.findall(r'<tr>((?:<td[^>]*>[^<]*<br>[✓✗]</td>){3})<td[^>]*><b>(\d)</b></td></tr>', EX[5])
+shown = {tuple(re.sub(r'<br>.*', '', c).replace('&nbsp;', ' ') for c in re.findall(r'>([^<]*<br>[✓✗])</td>', cells)): int(n) for cells, n in tbl}
+comp = {o: wins(o) for o in orders}
+report('S1/explore table', shown == comp, f'{len(shown)} rows; ' + '; '.join(f"{'/'.join(o)}={comp[o]}" for o in orders))
+ticks = [(n.replace('&nbsp;', ' '), t) for n, t in re.findall(r'<td[^>]*>([^<]*)<br>([✓✗])</td>', EX[5])]
+report('S1/explore ticks', all((t == '✓') == (BLUE[n] < RED[i % 3][1]) for i, (n, t) in enumerate(ticks)) and len(ticks) == 18, f'{len(ticks)} cells checked')
+# a: runners faster than Nurul
+allr = dict(RED) | BLUE
+opt = [o.split(',')[0] for o in q['a']['options']]
+want = [i for i, n in enumerate(opt) if allr[n] < allr['Nurul']]
+report('S1/a', want == q['a']['answer'], f'computed={want} ({[opt[i] for i in want]}) stored={q["a"]["answer"]}')
+report('S1/b', q['b']['answer'] == [wins(('Hafiz', 'Mei Ling', 'Jun Jie')), wins(('Jun Jie', 'Hafiz', 'Mei Ling'))],
+       f"computed={[wins(('Hafiz','Mei Ling','Jun Jie')), wins(('Jun Jie','Hafiz','Mei Ling'))]} stored={q['b']['answer']}")
 report('S1/c', q['c']['answer'] == [len(orders)], f'computed={len(orders)} stored={q["c"]["answer"]}')
-n2 = sum(wins(o) >= 2 for o in orders)
-report('S1/d', q['d']['answer'] == [n2], f'computed={n2} stored={q["d"]["answer"]} winning orders={[o for o in orders if wins(o)>=2]}')
-# e: king sees Tian Ji's order first and picks his own; guaranteed wins = min over TJ orders of (king's best reply)
-guar = max(min(sum(speed[t] > speed[k] for t, k in zip(o, ko)) for ko in permutations(king)) for o in orders)
+n2 = [o for o in orders if wins(o) >= 2]
+report('S1/d', q['d']['answer'] == [len(n2)], f'computed={len(n2)} stored={q["d"]["answer"]} winning orders={n2}')
+# e: Red sees Blue's order first, then picks its own; Blue's guaranteed wins = max over Blue orders of min over Red replies
+guar = max(min(sum(BLUE[b] < dict(RED)[r] for b, r in zip(o, ro)) for ro in permutations(dict(RED))) for o in orders)
 report('S1/e', int(q['e']['options'][q['e']['answer']]) == guar, f'computed={guar} stored option={q["e"]["options"][q["e"]["answer"]]}')
-# f: chess. strength ranks: O1 > Ravi > O2 > MeiLing > O3 > Farah. Boards worth 3,2,1.
-st = {'O1': 6, 'Ravi': 5, 'O2': 4, 'Mei': 3, 'O3': 2, 'Farah': 1}
-best = max(sum(pts for p, o, pts in zip(perm, ['O1', 'O2', 'O3'], [3, 2, 1]) if st[p] > st[o]) for perm in permutations(['Ravi', 'Mei', 'Farah']))
-report('S1/f', q['f']['answer'] == [best], f'computed={best} stored={q["f"]["answer"]}')
-# g/h: cards
+# f/g: cards
 H = [7, 4, 11]; C = [12, 8, 5]
 cw = lambda o: sum(c > h for c, h in zip(o, H))
 allwin = [o for o in permutations(C) if cw(o) == 3]
-opt = [tuple(int(x) for x in s.split(', ')) for s in q['g']['options']]
-report('S1/g', len(allwin) == 1 and opt.index(allwin[0]) == q['g']['answer'], f'all-3 orders={allwin} stored option={q["g"]["options"][q["g"]["answer"]]}')
-nh = sum(cw(o) >= 2 for o in permutations(C))
-report('S1/h', q['h']['answer'] == [nh], f'computed={nh} stored={q["h"]["answer"]} table={[(o, cw(o)) for o in permutations(C)]}')
-# i: pair race, smaller time wins
-R = [11.8, 12.6, 13.4, 14.5]; B = [12.2, 13.0, 13.9, 14.8]
-bw = max(sum(b < r for b, r in zip(o, R)) for o in permutations(B))
-report('S1/i', q['i']['answer'] == [bw], f'computed={bw} stored={q["i"]["answer"]} (orders achieving it: {sum(sum(b<r for b,r in zip(o,R))==bw for o in permutations(B))})')
+optf = [tuple(int(x) for x in s.split(', ')) for s in q['f']['options']]
+report('S1/f', len(allwin) == 1 and optf.index(allwin[0]) == q['f']['answer'], f'all-3 orders={allwin} stored option={q["f"]["options"][q["f"]["answer"]]}')
+ng = sum(cw(o) >= 2 for o in permutations(C))
+report('S1/g', q['g']['answer'] == [ng], f'computed={ng} stored={q["g"]["answer"]} table={[(o, cw(o)) for o in permutations(C)]}')
+GS = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
+  "import u from './js/content/unit4b.js'; console.log(JSON.stringify(u.S1.practice.find(q => q.id === 'g').solution[1]))"], cwd='/home/claude/sgctmath'))
+rows = re.findall(r'<tr><td>([^<]*)</td><td[^>]*>(\d)</td></tr>', GS)
+parsed = {tuple(int(x) for x in re.findall(r'\d+', r)): int(n) for r, n in rows}
+report('S1/g table', parsed == {o: cw(o) for o in permutations(C)}, f'{len(parsed)} rows in the solution table match enumeration')
+# h: chess. strength ranks O1 > Kumar > O2 > Siti > O3 > Marcus. Boards worth 3,2,1.
+st = {'O1': 6, 'Kumar': 5, 'O2': 4, 'Siti': 3, 'O3': 2, 'Marcus': 1}
+best = max(sum(pts for p, o, pts in zip(perm, ['O1', 'O2', 'O3'], [3, 2, 1]) if st[p] > st[o]) for perm in permutations(['Kumar', 'Siti', 'Marcus']))
+report('S1/h', q['h']['answer'] == [best], f'computed={best} stored={q["h"]["answer"]}')
+# i: 4-runner race, smaller time wins
+G = [11.8, 12.6, 13.4, 14.5]; Y = [12.2, 13.0, 13.9, 14.8]
+yw = max(sum(y < g for y, g in zip(o, G)) for o in permutations(Y))
+report('S1/i', q['i']['answer'] == [yw], f'computed={yw} stored={q["i"]["answer"]} (orders achieving it: {sum(sum(y<g for y,g in zip(o,G))==yw for o in permutations(Y))})')
 
 print('ALL GOOD' if bad == 0 else f'{bad} PROBLEMS')

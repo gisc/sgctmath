@@ -5,7 +5,7 @@ Read this whole file before writing a unit. **`js/content/unit1.js` is the gold 
 ## 1. What we are building
 An interactive, self-checking web version of a P4 maths-thinking course for Singapore pupils (age 9–10).
 - The topic list comes from a copyrighted Chinese workbook. **Do not translate or copy its text, questions, numbers, stories or pictures.** Use its pages (`/home/claude/bookpages/NNN.jpg`) only to understand **which skills and problem types** each topic covers and how hard they get. Then write **your own** explanations, stories and questions with **different numbers and situations**, set in Singapore.
-- Maths Story pages (Tian Ji, Han Xin, Descartes) retell well-known history or legend. That is public knowledge, so retell it in your own words.
+- Maths Story pages must be **original Singapore stories** too (the owner's decision): Sports Day relay plan (S1), counting the NDP contingent (S2), and HDB addresses like #05-12 as "two numbers, one place" (S3). Do not retell foreign history or legends.
 
 ## 2. Files you may touch
 (Your lead tells you which file is yours, e.g. `unit4b.js`. Use that file name for the verify script too: `tools/verify/unit4b.py`.)
@@ -69,7 +69,7 @@ Markup in any text: `[[f:3/4]]` fraction · `[[m:2 1/3]]` mixed number · `[[r:0
 - [ ] At least 6 of the 7–9 practice questions have a Singapore setting (place, food, transport, school life, festival or national event). Bare-number drills only where the skill is pure technique.
 - [ ] Names cover a diverse Singaporean mix across the topic (not all one ethnicity); titles like Mdm/Mr/Uncle/Auntie are used naturally.
 - [ ] Money is in $/cents at realistic Singapore prices. Units are metric. Spelling is British.
-- [ ] Nothing reads as translated from another country (no yuan/jin/li, no mainland place names, no foreign school customs) unless it is a retold history story.
+- [ ] Nothing reads as translated from another country (no yuan/jin/li, no mainland place names, no foreign school customs) (this applies to Maths Story pages too).
 - [ ] The adult notes link to the Singapore MOE syllabus (P4 / P5–P6 / enrichment) and use SG terms (model drawing, units and parts, supposition).
 
 **Visual quality**
