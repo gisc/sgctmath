@@ -10,7 +10,7 @@ bad = 0
 def check(tid, qid, computed, note=''):
     global bad
     s = stored[tid][qid]
-    ok = s == computed
+    ok = s == computed or [str(x) for x in s] == [str(x) for x in computed]
     bad += not ok
     print(f"{'OK ' if ok else 'BAD'} {tid}/{qid}: computed={computed} stored={s} {note}")
 

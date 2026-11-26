@@ -330,7 +330,7 @@ const t07 = {
       hint: 'Count in groups: the smallest triangles (pointing up and pointing down), then triangles made of 4 small ones, then the whole big triangle.',
       solution: ['Smallest triangles: 6 pointing up + 3 pointing down = 9.', 'Middle-sized triangles (each made of 4 small ones): 3.', 'The whole big triangle: 1.', 'Total: 9 + 3 + 1 = <b>13</b> triangles.'] },
   ],
-  adult: 'Links to school work: P4 area of squares and rectangles and composite figures made of rectangles. Cutting a shape into <b>identical</b> (congruent) pieces is <b>enrichment</b>: it builds spatial sense and careful checking. Common mistakes: thinking pieces with the same area are identical (question D), and forgetting that a turned or flipped piece is still the same piece. Tip: let your child draw the shape on squared paper and colour each piece; real scissors help a lot!',
+  adult: 'Links to school work: P4 area of squares and rectangles and composite figures made of rectangles. Cutting a shape into <b>identical</b> (congruent) pieces is <b>enrichment</b>: it builds spatial sense and careful checking. Common mistakes: thinking pieces with the same area are identical (question 4), and forgetting that a turned or flipped piece is still the same piece. Tip: let your child draw the shape on squared paper and colour each piece; real scissors help a lot!',
 };
 
 /* ===================== Topic 8: Finding Angles Smartly ===================== */
@@ -474,7 +474,7 @@ const t08 = {
       hint: 'First find ∠ACB using the straight line BCD. Then use the angles in triangle ABC.',
       solution: ['B, C and D are on a straight line, so ∠ACB = 180° − 128° = 52°.', 'In triangle ABC: ∠<i>m</i> = 180° − 57° − 52° = <b>71°</b>.', 'Smart shortcut: 57° + 71° = 128°. The outside angle at C equals the two far inside angles added together!'] },
   ],
-  adult: 'Links to school work: P4 measuring and drawing angles, and turns on a clock face. The angle facts here (angles on a straight line, at a point, vertically opposite, and angles in a triangle) are taught in <b>P5</b>, so this topic is <b>enrichment</b> for P4. Common mistakes: reading the bigger angle on a clock, counting an angle twice when there are many rays, and forgetting that folding keeps angles the same size. Tip: tear the corners off a paper triangle together to see why they make 180°.',
+  adult: 'Links to school work: P4 measuring and drawing angles. The angle facts here (angles on a straight line, at a point, vertically opposite, and angles in a triangle) are taught in <b>P5</b>, so this topic is <b>enrichment</b> for P4. Common mistakes: reading the bigger angle on a clock, counting an angle twice when there are many rays, and forgetting that folding keeps angles the same size. Tip: tear the corners off a paper triangle together to see why they make 180°.',
 };
 
 /* ===================== Maths in Life: Beautiful Tessellations ===================== */
@@ -605,7 +605,7 @@ const L2 = {
       hint: 'Lines from the centre to the 6 corners split the hexagon into 6 big triangles. How many small triangles are in each big one?',
       solution: ['Lines from the centre to the 6 corners cut the hexagon into 6 big equilateral triangles.', 'Each big triangle has sides of 2 small sides, so it holds 4 small triangles (3 pointing one way, 1 the other).', '6 × 4 = <b>24</b> small triangles.'] },
   ],
-  adult: 'This "Maths in Life" page connects shapes, angles and art. It uses the fact that angles at a point add up to 360° (formally taught in P5), so it is <b>enrichment</b> that also links to P4 work on angles, squares and rectangles, and area (question G). Ask your child to spot tessellations around Singapore: HDB void decks, kopitiam floors, Peranakan shophouse tiles in Joo Chiat and Katong, and MRT station walls. A fun project: cut a shape out of one side of a square and stick it on the opposite side, then trace it again and again to make an Escher-style pattern.',
+  adult: 'This "Maths in Life" page connects shapes, angles and art. It uses the fact that angles at a point add up to 360° (formally taught in P5), so it is <b>enrichment</b> that also links to P4 work on angles, squares and rectangles, and area (question 7). Ask your child to spot tessellations around Singapore: HDB void decks, kopitiam floors, Peranakan shophouse tiles in Joo Chiat and Katong, and MRT station walls. A fun project: cut a shape out of one side of a square and stick it on the opposite side, then trace it again and again to make an Escher-style pattern.',
 };
 
 export default { t07, t08, L2 };

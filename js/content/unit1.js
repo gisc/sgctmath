@@ -95,7 +95,7 @@ const t01 = {
       hint: 'The block has 6 digits. Find the remainder when 2026 is divided by 6.',
       solution: ['2026 ÷ 6 = 337 remainder 4 (because 6 × 337 = 2022).', 'So the 2026th digit is the 4th digit of the block 4 2 8 <b>5</b> 7 1.', 'The answer is <b>5</b>.'] },
   ],
-  adult: 'Links to school work: P4 decimals and division; P5 dividing whole numbers to get decimals. Recurring-decimal notation is normally met in secondary school, so this topic is <b>enrichment</b>. The key idea for children: a decimal stops when a remainder of 0 appears, and repeats once a remainder they have seen before comes back.',
+  adult: 'Links to school work: P4 decimals, including dividing a whole number by a whole number to get a decimal (e.g. 5 ÷ 8 = 0.625). Recurring-decimal notation is normally met in secondary school, so this topic is <b>enrichment</b>. The key idea for children: a decimal stops when a remainder of 0 appears, and repeats once a remainder they have seen before comes back.',
 };
 
 /* ===================== Topic 2 ===================== */
@@ -104,7 +104,7 @@ const t02 = {
   title: 'Comparing Recurring Decimals',
   intro: 'Which is bigger, [[r:0.(3)]] or 0.33? It\'s a closer race than you think! Learn a sure-fire way to compare decimals that go on forever.',
   skills: ['Place value', 'Comparing', 'Ordering'],
-  art: () => svg('0 0 320 250', `<rect width="320" height="250" rx="20" fill="#f1edff"/>${A.balance('0.33', '0.333…', 7)}`, 'A balance scale comparing 0.33 and 0.333…'),
+  art: () => svg('-10 0 340 250', `<rect x="-10" width="340" height="250" rx="20" fill="#f1edff"/>${A.balance('0.33', '0.333…', 7)}`, 'A balance scale comparing 0.33 and 0.333…'),
   explore: {
     setup: 'In a class game, each pupil draws a number card. <b>The bigger number wins!</b> Chloe draws [[r:0.(3)]] and Arjun draws 0.33.',
     art: () => svg('0 0 340 300', `<rect width="340" height="300" rx="20" fill="#fff6e4"/>
@@ -162,7 +162,7 @@ const t02 = {
       hint: '[[r:0.(6)]] = 0.6666… Try the box as 5, then 6, then 7.',
       solution: ['[[r:0.(6)]] = 0.6666…', 'If the box is 0 to 5, then 0.6☐7 &lt; 0.66, so it is smaller. ✓', 'If the box is 6: 0.667 &gt; 0.6666…, so it is <b>not</b> smaller.', 'If the box is 7, 8 or 9, it is bigger.', 'So <b>6</b> digits work: 0, 1, 2, 3, 4, 5.'] },
   ],
-  adult: 'Links to school work: P4 comparing and ordering decimals by place value. The new twist is making the "hidden" digits visible by writing the decimal out in full. A common mistake is thinking [[r:0.(15)]] and [[r:0.1(5)]] are equal because they start the same way.',
+  adult: 'Links to school work: P4 comparing and ordering decimals by place value. Recurring-decimal notation is secondary-level, so this topic is <b>enrichment</b>. The new twist is making the "hidden" digits visible by writing the decimal out in full. A common mistake is thinking [[r:0.(15)]] and [[r:0.1(5)]] are equal because they start the same way.',
 };
 
 /* ===================== Topic 3 ===================== */
@@ -216,7 +216,7 @@ const t03 = {
       template: '{f:0,1} = {m:2,3,4}', blanks: [{ answer: 17 }, { answer: 6 }, { answer: 2 }, { answer: 5 }, { answer: 6 }],
       hint: 'Each circle has 6 equal parts. Count all the shaded parts.',
       solution: ['Each circle is cut into 6 parts, so each part is [[f:1/6]].', 'Shaded parts: 6 + 6 + 5 = 17, so the shaded part is [[f:17/6]].', '17 ÷ 6 = 2 remainder 5, so [[f:17/6]] = [[m:2 5/6]].'] },
-    { id: 'e', level: 2, type: 'blanks', prompt: 'Mdm Tan bakes <b>23</b> muffins for a school fair. A box holds <b>4</b> muffins. How many boxes of muffins is that? Write your answer as a mixed number.',
+    { id: 'e', level: 2, type: 'blanks', prompt: 'Mdm Tan bakes <b>23</b> muffins for a school fair. A box holds <b>4</b> muffins. How many boxes\' worth of muffins is that? Write your answer as a mixed number.',
       template: '{m:0,1,2} boxes', blanks: [{ answer: 5 }, { answer: 3 }, { answer: 4 }],
       hint: '23 ÷ 4 = ? remainder ? The leftover muffins fill part of a box.',
       solution: ['23 ÷ 4 = 5 remainder 3', '5 full boxes and 3 out of 4 places in the next box are filled.', 'That is [[m:5 3/4]] boxes.'] },
@@ -358,18 +358,22 @@ const L1 = {
       options: ['0', '4', '8', '12'], answer: 0,
       hint: 'In Plan A, where are all the pineapple tarts?',
       solution: 'In Plan A, all 12 pineapple tarts are in Arjun\'s box. If it drops, <b>0</b> are left, and no family gets any.' },
+    { id: 'g', level: 1, type: 'mcq', prompt: 'Which of these is an example of <b>spreading the risk</b>?',
+      options: ['Keeping all your class photos on one phone only', 'Saving your project on the school laptop <b>and</b> on a thumb drive', 'Packing all the team\'s water bottles into one bag', 'Bringing only one pencil to the exam'], answer: 1,
+      hint: 'Which choice still works if one thing gets lost or broken?',
+      solution: 'If the laptop breaks, the thumb drive still has the project. Keeping it in <b>two places</b> spreads the risk. The other choices put everything in one place.' },
     { id: 'b', level: 1, type: 'blanks', prompt: 'In <b>Plan B</b>, one box drops. How many <b>ondeh-ondeh</b> are left?',
       template: '{0} ondeh-ondeh', blanks: [{ answer: 8 }],
       hint: 'Each box in Plan B has 4 ondeh-ondeh. How many boxes are still safe?',
       solution: ['2 boxes are still safe.', '2 × 4 = <b>8</b> ondeh-ondeh are left.'] },
-    { id: 'c', level: 2, type: 'blanks', prompt: 'In each plan, exactly <b>one</b> box drops. How many pieces of kueh are lost <b>altogether</b>?',
-      template: 'Plan A: {0} pieces &nbsp;&nbsp; Plan B: {1} pieces', blanks: [{ answer: 12 }, { answer: 12 }],
-      hint: 'Count everything inside one box for each plan.',
-      solution: ['Plan A: one box holds 12 pieces of one kind, so 12 are lost.', 'Plan B: one box holds 4 + 4 + 4 = 12 pieces, so 12 are lost.', 'Both plans lose the <b>same number</b>. Plan B just spreads the loss out.'] },
     { id: 'd', level: 1, type: 'mcq', prompt: 'Which plan makes sure that, even if one box drops, the other families still get <b>all three</b> kinds of kueh?',
       options: ['Plan A', 'Plan B', 'Both plans', 'Neither plan'], answer: 1,
       hint: 'In which plan does every box have every kind of kueh?',
       solution: 'In Plan B every box has all three kinds, so the boxes that are still safe still have ondeh-ondeh, kueh lapis and pineapple tarts. The answer is <b>Plan B</b>.' },
+    { id: 'c', level: 2, type: 'blanks', prompt: 'In each plan, exactly <b>one</b> box drops. How many pieces of kueh are lost <b>altogether</b>?',
+      template: 'Plan A: {0} pieces &nbsp;&nbsp; Plan B: {1} pieces', blanks: [{ answer: 12 }, { answer: 12 }],
+      hint: 'Count everything inside one box for each plan.',
+      solution: ['Plan A: one box holds 12 pieces of one kind, so 12 are lost.', 'Plan B: one box holds 4 + 4 + 4 = 12 pieces, so 12 are lost.', 'Both plans lose the <b>same number</b>. Plan B just spreads the loss out.'] },
     { id: 'e', level: 2, type: 'blanks', prompt: 'Next week, <b>4</b> friends share <b>20 curry puffs</b> and <b>16 sardine puffs</b> equally among their 4 families. Each friend carries one family\'s share in a box. What goes in each box?',
       template: '{0} curry puffs and {1} sardine puffs', blanks: [{ answer: 5 }, { answer: 4 }],
       hint: 'Divide each kind by the number of boxes.',
@@ -378,10 +382,6 @@ const L1 = {
       template: '{0} puffs', blanks: [{ answer: 18 }],
       hint: 'How many puffs are in one box? How many boxes are still fine?',
       solution: ['One box: 5 + 4 = 9 puffs', 'Boxes still fine: 4 − 2 = 2', '2 × 9 = <b>18</b> puffs'] },
-    { id: 'g', level: 1, type: 'mcq', prompt: 'Which of these is an example of <b>spreading the risk</b>?',
-      options: ['Keeping all your class photos on one phone only', 'Saving your project on the school laptop <b>and</b> on a thumb drive', 'Packing all the team\'s water bottles into one bag', 'Bringing only one pencil to the exam'], answer: 1,
-      hint: 'Which choice still works if one thing gets lost or broken?',
-      solution: 'If the laptop breaks, the thumb drive still has the project. Keeping it in <b>two places</b> spreads the risk. The other choices put everything in one place.' },
   ],
   adult: 'This "Maths in Life" page builds reasoning and fair-sharing skills (P4 multiplication and division). The big idea, spreading risk (diversification), shows up later in science (backups), daily life and money management. Ask your child: "Where else could we use this idea?"',
 };

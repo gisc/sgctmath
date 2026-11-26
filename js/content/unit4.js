@@ -251,7 +251,7 @@ const t09 = {
       solution: ['Ravi and Mei Ling cross: 2 min.', 'Ravi brings the torch back: 1 min.', 'Uncle Kumar and Grandma cross together: 8 min.', 'Mei Ling brings the torch back: 2 min.', 'Ravi and Mei Ling cross again: 2 min.',
         'Total = 2 + 1 + 8 + 2 + 2 = <b>15 minutes</b>. (If Ravi walks with each person and brings the torch back each time, it takes 2 + 1 + 6 + 1 + 8 = 18 min.)'] },
   ],
-  adult: 'Links to school work: P4 time (durations, the 24-hour clock) and adding whole numbers. Planning the order of jobs is not in the MOE syllabus, so this topic is <b>enrichment</b>. The ideas come from real-life planning: the "chain" is what planners call the critical path, and "shortest job first" is used to plan queues. Common mistakes: adding up all the times without noticing that some jobs can overlap; in pan problems, insisting that each batch finishes both sides before the next prata goes in. Tip: draw a timeline with one row for each person or machine, so overlaps are easy to see.',
+  adult: 'Links to school work: time (durations and the 24-hour clock, from P3) and adding whole numbers. Planning the order of jobs is not in the MOE syllabus, so this topic is <b>enrichment</b>. The ideas come from real-life planning: the "chain" is what planners call the critical path, and "shortest job first" is used to plan queues. Common mistakes: adding up all the times without noticing that some jobs can overlap; in pan problems, insisting that each batch finishes both sides before the next prata goes in. Tip: draw a timeline with one row for each person or machine, so overlaps are easy to see.',
 };
 
 /* ===================== Topic 10 ===================== */
@@ -433,7 +433,7 @@ const t11 = {
       solution: ['Clue 2: Daniel\'s snack is savoury but not curry puffs, so Daniel brought <b>murukku</b>.', 'Clue 3: Jun Jie did not bring pineapple tarts or curry puffs, and murukku is taken, so Jun Jie brought <b>kueh lapis</b>.', 'Clue 1: Farah brought something sweet. Kueh lapis is taken, so Farah brought <b>pineapple tarts</b>.',
         answerTbl({ Farah: 'pineapple tarts', 'Jun Jie': 'kueh lapis', Kumar: 'curry puffs', Daniel: 'murukku' }), '<b>Kumar</b> brought the curry puffs.'] },
     { id: 'e', level: 2, type: 'blanks', prompt: `The robotics CCA cupboard has a padlock with a 3-digit code. The three digits are all <b>different</b>. Here are some guesses and what they tell you:${tbl(['Guess', 'What we know'], [['9 5 6', 'One digit is correct and in the right place.'], ['6 8 7', 'One digit is correct but in the wrong place.'], ['7 4 3', 'Two digits are correct, but both are in the wrong place.'], ['3 2 8', 'Nothing is correct.']])}What is the code?`,
-      template: 'The code is {0}', blanks: [{ answer: 974 }],
+      template: 'The code is {0}', blanks: [{ answer: '974', kind: 'text' }],
       hint: 'Start with the guess where <b>nothing</b> is correct. Cross those digits out of the other guesses.',
       solution: ['3 2 8: nothing is correct, so 3, 2 and 8 are not in the code.', '7 4 3: two digits are correct. 3 is out, so <b>7 and 4</b> are in the code. Both are in the wrong place: 7 is not 1st and 4 is not 2nd.',
         '6 8 7: 8 is out and 7 is in, so 7 is the one correct digit and 6 is not in the code. 7 is in the wrong place, so 7 is not 3rd. So <b>7 is 2nd</b>.',

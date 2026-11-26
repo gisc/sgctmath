@@ -274,7 +274,7 @@ export function balance(left, right, tilt = -8) {
   const pan = (x, y, t) => `<path d="M${x} ${y} l-34 50 M${x} ${y} l34 50" stroke="${INK}" stroke-width="2.5"/>
     <path d="M${x - 46} ${y + 50} h92 q-6 22 -46 22 q-40 0 -46 -22z" fill="#ffd45c" ${S}/>
     <rect x="${x - 40}" y="${y + 6}" width="80" height="38" rx="10" fill="#fff" ${S}/>
-    <text x="${x}" y="${y + 33}" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="22" fill="${INK}">${t}</text>`;
+    <text x="${x}" y="${y + 33}" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="${String(t).length > 4 ? 17 : 22}" fill="${INK}">${t}</text>`;
   return `<path d="M130 230 h60 l-12 -150 h-36z" fill="#7b61ff" ${S}/><rect x="110" y="226" width="100" height="14" rx="6" fill="#5a43d6" ${S}/>
     <line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="#b7a8ff" stroke-width="4" stroke-linecap="round"/>
     <circle cx="160" cy="70" r="10" fill="#ffd45c" ${S}/>${pan(lx, ly, left)}${pan(rx, ry, right)}`;

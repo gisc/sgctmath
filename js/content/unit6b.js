@@ -96,7 +96,7 @@ const t18 = {
           { who: 'Aisyah', items: [['puff', 2], ['soya', 1]], price: '= $3.70', boxes: [[0, 3, 'same']] },
           { who: 'Arjun', items: [['puff', 2], ['soya', 3]], price: '= $5.50', boxes: [[0, 3, 'same'], [3, 5, 'extra']] },
         ], { note: '2 more soya milk ↔ $1.80 more', label: 'Aisyah: 2 curry puffs and 1 soya milk cost 3.70. Arjun: 2 curry puffs and 3 soya milk cost 5.50' }) },
-      { who: 'arjun', text: 'The green parts are exactly the same. Arjun only bought <b>2 more soya milk</b>, and paid <b>$1.80 more</b>. So the extra soya milk must cost the extra money!' },
+      { who: 'arjun', text: 'The green parts are exactly the same. I only bought <b>2 more soya milk</b>, and paid <b>$1.80 more</b>. So the extra soya milk must cost the extra money!' },
       { who: 'leo', mood: 'teach', text: 'That\'s <b>matching quantities</b>: a difference in <b>quantity</b> matches a difference in <b>money</b>. 2 soya milk cost $1.80, so 1 soya milk costs $1.80 ÷ 2 = <b>$0.90</b>. Then 2 curry puffs cost $3.70 − $0.90 = $2.80, so 1 curry puff costs <b>$1.40</b>.' },
       { who: 'weiming', mood: 'think', text: 'My receipt is trickier: <b>1 curry puff and 2 soya milk: $3.20</b>. Chloe\'s is <b>3 curry puffs and 4 soya milk: $7.80</b>. Nothing matches!',
         art: () => orderRows([
@@ -214,7 +214,7 @@ function pairRect({ first, d, n, u = 5, W = 336 }) {
   return svg(`0 0 ${W} ${H}`, panel(W, H, g, '#fffdf6'), `Each row as a bar, plus a copy turned round: every row makes ${first + last}, ${n} rows`, `style="max-width:${W + 40}px"`);
 }
 // weekly savings bars: weeks 1..k then … then week n with '?'
-function saveBars({ first, d, k = 4, n = 12, unit = 3.2, W = 340, H = 200 }) {
+function saveBars({ first, d, k = 4, n = 12, unit = 3.2, W = 370, H = 200 }) {
   const base = 168, bw = 40, gap = 20, x0 = 20;
   let g = `<path d="M10 ${base} H${W - 10}" ${S}/>`;
   for (let i = 0; i < k; i++) {
@@ -275,7 +275,7 @@ const t19 = {
     art: () => {
       let chairs = '';
       for (let r = 0; r < 5; r++) {
-        const n = 6 + r, y = 92 + r * 30, w = 20, x0 = 170 - n * w / 2;
+        const n = 12 + 2 * r, y = 92 + r * 30, w = 10, x0 = 170 - n * w / 2;
         for (let i = 0; i < n; i++) chairs += `<rect x="${x0 + i * w + 2}" y="${y}" width="${w - 4}" height="16" rx="4" fill="${r % 2 ? '#7b9cff' : '#9fb4ff'}" ${S} stroke-width="2"/><rect x="${x0 + i * w + 2}" y="${y + 13}" width="${w - 4}" height="5" rx="2" fill="#5a6fd6"/>`;
       }
       return svg('0 0 340 300', panel(340, 300, `
@@ -449,7 +449,7 @@ const S2 = {
     { title: 'All short by the same?', text: 'If every grouping is short by the same amount, the number is a common multiple minus that amount. ÷ 3 r 2 and ÷ 4 r 3: both are 1 short, so try 12 − 1 = 11.' },
   ],
   practice: [
-    { id: 'a', level: 1, type: 'mcq', prompt: 'Mdm Rahman packs her kuih bahulu into bags of 4. She has <b>1</b> kuih bahulu left over. How many could she have made?',
+    { id: 'a', level: 1, type: 'mcq', prompt: 'Mdm Rahimah packs her kuih bahulu into bags of 4. She has <b>1</b> kuih bahulu left over. How many could she have made?',
       options: ['18', '21', '24', '26'], answer: 1,
       hint: 'Divide each number by 4. Which one leaves a remainder of 1?',
       solution: ['18 ÷ 4 = 4 r 2 ✗', '21 ÷ 4 = 5 r <b>1</b> ✓', '24 ÷ 4 = 6 r 0 ✗', '26 ÷ 4 = 6 r 2 ✗', 'So she could have made <b>21</b>.'] },

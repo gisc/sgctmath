@@ -26,7 +26,7 @@ export function fmt(str) {
 export function parseNum(raw) {
   if (raw == null) return NaN;
   let s = String(raw).trim().toLowerCase()
-    .replace(/[$,]/g, '').replace(/(\d) (?=\d{3}\b)/g, '$1').replace(/\s*(cm|m|km|kg|g|l|ml|years?|min|mins|minutes|s|h|°|degrees?)$/, '')
+    .replace(/[$,]/g, '').replace(/(\d) (?=\d{3}\b)/g, '$1').replace(/\s*(km\/h|m\/s|cm²|m²|cm2|m2|hours?|hrs?|seconds?|secs?|pages?|cents?|¢|cm|m|km|kg|g|l|ml|years?|min|mins|minutes|s|h|°|degrees?)$/, '')
     .replace(/[−–]/g, '-').replace(/÷/g, '/').trim();
   if (s === '') return NaN;
   let m = s.match(/^(-?\d+)\s+(\d+)\s*\/\s*(\d+)$/);

@@ -162,7 +162,7 @@ const t05 = {
       hint: 'Write 2468 as 2467 + 1, and 1358 as 1357 + 1. Then split both products.',
       solution: ['A = (2467 + 1) × 1357 = 2467 × 1357 + <b>1357</b>', 'B = 2467 × (1357 + 1) = 2467 × 1357 + <b>2467</b>', 'Both have the same part 2467 × 1357, so compare what is left: 2467 &gt; 1357.', 'B is bigger by 2467 − 1357 = 1110. The answer is <b>B is bigger by 1110</b>.'] },
   ],
-  adult: 'Links to school work: P4 multiplication (up to 4 digits by 1 digit and 3 digits by 2 digits) and mental calculation. Splitting a number to multiply is <b>within</b> P4, but naming the distributive law and "factoring out" a shared number (questions e to i) is <b>enrichment</b>. Common mistakes: multiplying only one part (23 × 104 = 2300 + 4), and taking away the wrong amount (46 × 99 = 4600 − 99 instead of 4600 − 46). Encourage your child to draw a quick area model (a rectangle split into blocks) when unsure.',
+  adult: 'Links to school work: P4 multiplication (up to 4 digits by 1 digit and 3 digits by 2 digits) and mental calculation. Splitting a number to multiply is <b>within</b> P4, but naming the distributive law and "factoring out" a shared number (questions 5 to 9) is <b>enrichment</b>. Common mistakes: multiplying only one part (23 × 104 = 2300 + 4), and taking away the wrong amount (46 × 99 = 4600 − 99 instead of 4600 − 46). Encourage your child to draw a quick area model (a rectangle split into blocks) when unsure.',
 };
 
 /* ===================== Topic 6 ===================== */
@@ -252,7 +252,7 @@ const t06 = {
       hint: 'Let her number be 1 unit. Writing 1 in front adds 100 000: P = 1 unit + 100 000. Writing 1 at the end moves every digit up one place: Q = 10 units + 1.',
       solution: ['P = 1 unit + 100 000 and Q = 10 units + 1.', 'Q = 3 × P, so 10 units + 1 = 3 units + 300 000.', 'Take away 3 units and 1 from both sides: 7 units = 299 999.', '1 unit = 299 999 ÷ 7 = 42 857.', 'Check: P = 142 857, Q = 428 571, and 3 × 142 857 = 428 571 ✓', 'Her number is <b>42857</b>.'] },
   ],
-  adult: 'Links to school work: P4 whole numbers up to 100 000 (place value, forming the largest and smallest numbers). Questions a to c are <b>within</b> the P4 syllabus. Using letters for unknown digits (' + ov('abc') + ' = 100' + v('a') + ' + 10' + v('b') + ' + ' + v('c') + ') and the digit puzzles in d to i are <b>enrichment</b> (olympiad style), although the unit-based solutions use the familiar P4 to P6 "units and parts" thinking. Common mistakes: reading ' + ov('abc') + ' as ' + v('a') + ' × ' + v('b') + ' × ' + v('c') + ', and putting 0 first when forming the smallest number. A fun extension: try the 142 857 number on a calculator by multiplying it by 2, 3, 4, 5 and 6.',
+  adult: 'Links to school work: P4 whole numbers up to 100 000 (place value, forming the largest and smallest numbers). Questions 1 to 3 are <b>within</b> the P4 syllabus. Using letters for unknown digits (' + ov('abc') + ' = 100' + v('a') + ' + 10' + v('b') + ' + ' + v('c') + ') and the digit puzzles in questions 4 to 9 are <b>enrichment</b> (olympiad style), although the unit-based solutions use the familiar P4 to P6 "units and parts" thinking. Common mistakes: reading ' + ov('abc') + ' as ' + v('a') + ' × ' + v('b') + ' × ' + v('c') + ', and putting 0 first when forming the smallest number. A fun extension: try the 142 857 number on a calculator by multiplying it by 2, 3, 4, 5 and 6.',
 };
 
 export default { t05, t06 };
