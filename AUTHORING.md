@@ -64,6 +64,14 @@ Markup in any text: `[[f:3/4]]` fraction · `[[m:2 1/3]]` mixed number · `[[r:0
 - Names: a diverse Singaporean mix (Chinese, Malay, Indian, Eurasian), e.g. Mei Ling, Hafiz, Priya, Ravi, Siti, Jun Jie, Nurul, Kumar, Daniel, Farah, Mdm Lim, Mr Rahman, Mrs Pillai, Uncle Tan. The recurring cast: **Leo** (red-and-white lion-cub mascot, the teacher voice), **Wei Ming**, **Aisyah** (wears a tudung), **Arjun**, **Chloe**.
 - Keep it warm and inclusive. Light Singlish ("Shiok!", "Can lah!") is fine in dialogue but rare.
 
+**Singapore adaptation checklist (the user's top priority; check every topic before reporting)**
+- [ ] The explore story and the banner/explore art are set somewhere recognisably Singaporean.
+- [ ] At least 6 of the 7–9 practice questions have a Singapore setting (place, food, transport, school life, festival or national event). Bare-number drills only where the skill is pure technique.
+- [ ] Names cover a diverse Singaporean mix across the topic (not all one ethnicity); titles like Mdm/Mr/Uncle/Auntie are used naturally.
+- [ ] Money is in $/cents at realistic Singapore prices. Units are metric. Spelling is British.
+- [ ] Nothing reads as translated from another country (no yuan/jin/li, no mainland place names, no foreign school customs) unless it is a retold history story.
+- [ ] The adult notes link to the Singapore MOE syllabus (P4 / P5–P6 / enrichment) and use SG terms (model drawing, units and parts, supposition).
+
 **Visual quality**
 - Every topic needs a **unique banner** and a **different explore scene**, plus question diagrams wherever a picture helps (geometry **must** have accurate diagrams drawn to match the numbers: angles look like their size, lengths in proportion).
 - Use `js/art.js` exports: `svg, leo, leoFace, kid(key,{x,y,s,mood,pose:'stand'|'wave'|'cheer'|'think',flip}), kidFace, cloud, tree, hdb, mrt, heroScene, fractionCircle(s), prata, cup, bottle, matchSquares, matchPattern, bars (bar models), balance, kopi, kayaToast, eggs, mysteryBox, KUEH, kuehBox, table, puddle, ink, stroke`. Build new unit-specific helpers inside your unit file in the **same style**: flat colours, `stroke="#23304a" stroke-width="3"`, rounded joins, palette teal `#0f9d94`, coral `#ff6b5b`, sun `#ffc94a`, grape `#7b61ff`, leaf `#3dbb6b`, sky `#4aa8ff`. Text in SVG: `font-family="Baloo 2, sans-serif"` (headings) or `Nunito, sans-serif`, weight 800.
