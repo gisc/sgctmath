@@ -227,3 +227,5 @@ main:focus,main:focus-visible{outline:none}
 .step .bubble{min-width:0}.step .art-inline{overflow-x:auto}.solution li svg,.solution li table{display:block;margin:6px 0}
 .q,.section{scroll-margin-top:84px}
 @media (max-width:560px){.feedback{flex-direction:column;gap:6px}.feedback .fb-ico{width:36px;height:36px}.solution{padding:10px 12px}.solution ol{padding-left:18px}}
+.story>*,.feedback>div,.step>.bubble{min-width:0}.solution,.bubble{overflow-x:auto}
+@media (max-width:560px){.feedback>div{align-self:stretch;max-width:100%}}

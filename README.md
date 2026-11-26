@@ -10,17 +10,22 @@ Free, interactive maths-thinking practice for Primary 4 pupils in Singapore.
 
 Questions, stories and illustrations are **original** and set in everyday Singapore life (kopitiam, prata shop, MRT, HDB estates). The topic sequence is modelled on the contents list of a P4 maths-thinking workbook. No text or images from that book are reproduced.
 
-## Progress
-| Unit | Topics | Status |
-|---|---|---|
-| 1 Number Sense | 1–4 + Maths in Life | ✅ done |
-| 2–13 | 5–26, stories, Challenge Zone | 🚧 coming |
+## Contents
+All 13 units are complete: 28 topics and about 280 practice questions.
+
+| Part | Units |
+|---|---|
+| A · Maths Abilities | 1 Number Sense · 2 Calculation Power · 3 Seeing Shapes · 4 Logical Thinking · 5 Maths Modelling |
+| B · Maths Methods | 6 Draw a Model · 7 Work Backwards · 8 Make a Supposition · 9 Addition Principle · 10 Multiplication Principle · 11 Overlapping Groups · 12 Think About the Worst Case · 13 Challenge Zone |
+
+Every unit has an independent verification script in `tools/verify/` that recomputes each answer, by brute force where possible, and checks that each puzzle has exactly one solution.
 
 ## Develop
 A plain static site, with no build step.
 ```
 python3 -m http.server   # then open http://localhost:8000
 node tests.mjs           # checks every answer key against the site's own checker
+for f in tools/verify/*.py; do python3 $f | tail -1; done   # independent recomputation
 ```
 Content lives in `js/content/unitN.js`. Illustrations are hand-coded SVG in `js/art.js`.
 
