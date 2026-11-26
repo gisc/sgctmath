@@ -193,7 +193,7 @@ export function renderQuestion(q, n, topicId, onChange) {
     fb.innerHTML = `<div class="fb-ico">${leoFace(mood)}</div><div><h4>${title}</h4>${html}${extra ? `<p>${extra}</p>` : ''}</div>`;
   }
   function resetQ() {
-    locked = false; tries = 0;
+    locked = false; tries = Math.max(tries, 1); // a retry never counts as a first try
     checkBtn.style.display = ''; againBtn.style.display = 'none'; showBtn.textContent = 'Show me how';
     fb.className = 'feedback'; fb.innerHTML = '';
     if (q.type === 'mcq') { resp.clear(); body.querySelectorAll('.opt').forEach(x => { x.disabled = false; x.className = 'opt' + (Array.isArray(q.answer) ? ' multi' : ''); }); }
