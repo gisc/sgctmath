@@ -224,3 +224,4 @@ main:focus,main:focus-visible{outline:none}
 @media (max-width:560px){.topnav{flex-wrap:nowrap}.topnav a[href="#/"]{display:none}}
 .ov{text-decoration:overline;text-decoration-thickness:2px}
 @media (max-width:560px){.step{gap:8px}.step .who,.step .who svg{width:36px;height:36px}.step .bubble{padding:10px 12px}.steps{margin-right:-6px}}
+.step .bubble{min-width:0}.step .art-inline{overflow-x:auto}.solution li svg,.solution li table{display:block;margin:6px 0}

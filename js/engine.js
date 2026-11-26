@@ -174,7 +174,13 @@ export function renderQuestion(q, n, topicId, onChange) {
   function solutionHTML() {
     const s = q.solution;
     if (!s) return '';
-    const inner = Array.isArray(s) ? `<ol>${s.map(x => `<li>${fmt(x)}</li>`).join('')}</ol>` : fmt(s);
+    let inner;
+    if (Array.isArray(s)) {
+      // a picture/table given as its own item is attached to the step before it, not numbered
+      const items = [];
+      for (const x of s) { const t = String(x).trim(); if (items.length && /^<(svg|table|div)/i.test(t)) items[items.length - 1] += t; else items.push(fmt(x)); }
+      inner = `<ol>${items.map(x => `<li>${x}</li>`).join('')}</ol>`;
+    } else inner = fmt(s);
     return `<div class="solution"><b>Worked solution</b>${inner}</div>`;
   }
   function toggleSolution() {
