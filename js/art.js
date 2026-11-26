@@ -8,46 +8,63 @@ const id = p => `${p}${++uid}`;
 export const svg = (vb, inner, label = '', extra = '') =>
   `<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}" ${extra}>${label ? `<title>${label}</title>` : ''}${inner}</svg>`;
 
-/* ---------------- Ollie the otter (mascot) ---------------- */
-const OT = { fur: '#a8724a', furD: '#7f5233', belly: '#f6e1c6', nose: '#3a2a22' };
-function ollieHead(mood = 'happy') {
+/* ---------------- Leo the lion cub (mascot) — Singapore red & white ---------------- */
+const LN = { mane: '#e0282e', maneD: '#b81d23', face: '#fffaf4', fur: '#fffaf4', belly: '#ffffff', nose: '#7a2a2a', cheek: '#ff9b9b' };
+function maneShape(r = 44, bumps = 12, depth = 7) {
+  let d = '';
+  for (let i = 0; i <= bumps * 2; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / bumps;
+    const rr = i % 2 ? r : r - depth;
+    const x = (rr * Math.cos(a)).toFixed(1), y = (rr * Math.sin(a) * .95).toFixed(1);
+    if (i === 0) d += `M${x} ${y}`;
+    else { const am = a - Math.PI / bumps / 2, rm = r + depth * .35; d += ` Q${(rm * Math.cos(am)).toFixed(1)} ${(rm * Math.sin(am) * .95).toFixed(1)} ${x} ${y}`; }
+  }
+  return d + 'Z';
+}
+function leoHead(mood = 'happy') {
   const eyes = mood === 'happy'
-    ? `<path d="M-17 -4 q6 -7 12 0" fill="none" ${S}/><path d="M5 -4 q6 -7 12 0" fill="none" ${S}/>`
-    : `<circle cx="-11" cy="-4" r="5" fill="${INK}"/><circle cx="11" cy="-4" r="5" fill="${INK}"/><circle cx="-9.5" cy="-6" r="1.8" fill="#fff"/><circle cx="12.5" cy="-6" r="1.8" fill="#fff"/>`;
-  const brows = mood === 'think' ? `<path d="M-18 -15 l10 -3" ${S}/><path d="M8 -19 l10 4" ${S}/>` : '';
+    ? `<path d="M-17 -2 q6 -7 12 0" fill="none" ${S}/><path d="M5 -2 q6 -7 12 0" fill="none" ${S}/>`
+    : `<circle cx="-11" cy="-3" r="5" fill="${INK}"/><circle cx="11" cy="-3" r="5" fill="${INK}"/><circle cx="-9.5" cy="-5" r="1.8" fill="#fff"/><circle cx="12.5" cy="-5" r="1.8" fill="#fff"/>`;
+  const brows = mood === 'think' ? `<path d="M-18 -14 l10 -3" ${S}/><path d="M8 -18 l10 4" ${S}/>` : '';
   const mouth = mood === 'think'
-    ? `<path d="M-4 16 q4 -2 8 0" fill="none" ${S}/>`
-    : `<path d="M-8 12 q8 9 16 0" fill="#e9696b" ${S}/>`;
-  return `<circle cx="-27" cy="-24" r="9" fill="${OT.fur}" ${S}/><circle cx="27" cy="-24" r="9" fill="${OT.fur}" ${S}/>
-    <circle cx="-27" cy="-24" r="4" fill="${OT.furD}"/><circle cx="27" cy="-24" r="4" fill="${OT.furD}"/>
-    <ellipse cx="0" cy="0" rx="38" ry="34" fill="${OT.fur}" ${S}/>
-    <ellipse cx="0" cy="11" rx="24" ry="17" fill="${OT.belly}"/>
+    ? `<path d="M0 11 v4 M-5 18 q5 -3 10 0" fill="none" ${S} stroke-width="2.6"/>`
+    : `<path d="M0 11 v3 M-8 14 q8 10 16 0z" fill="#e9696b" ${S} stroke-width="2.6"/>`;
+  return `<path d="${maneShape(50, 13, 9)}" fill="${LN.mane}" ${S}/>
+    <path d="${maneShape(40, 13, 6)}" fill="${LN.maneD}" opacity=".35"/>
+    <circle cx="-23" cy="-24" r="9" fill="${LN.face}" ${S}/><circle cx="23" cy="-24" r="9" fill="${LN.face}" ${S}/>
+    <circle cx="-23" cy="-24" r="4.5" fill="${LN.cheek}"/><circle cx="23" cy="-24" r="4.5" fill="${LN.cheek}"/>
+    <ellipse cx="0" cy="2" rx="31" ry="29" fill="${LN.face}" ${S}/>
+    <path d="M-8 -26 q8 6 16 0" fill="none" stroke="${LN.mane}" stroke-width="5" stroke-linecap="round"/>
     ${eyes}${brows}
-    <ellipse cx="0" cy="5" rx="7" ry="5" fill="${OT.nose}"/>
+    <ellipse cx="0" cy="12" rx="15" ry="9" fill="#fff"/>
+    <path d="M-6 4 h12 l-6 7z" fill="${LN.nose}" stroke="${LN.nose}" stroke-width="2" stroke-linejoin="round"/>
     ${mouth}
-    <circle cx="-21" cy="8" r="5" fill="#ff9d8a" opacity=".55"/><circle cx="21" cy="8" r="5" fill="#ff9d8a" opacity=".55"/>
-    <path d="M-14 9 l-14 -2 M-14 13 l-13 3 M14 9 l14 -2 M14 13 l13 3" stroke="${INK}" stroke-width="1.6" stroke-linecap="round"/>`;
+    <circle cx="-20" cy="9" r="5" fill="${LN.cheek}" opacity=".6"/><circle cx="20" cy="9" r="5" fill="${LN.cheek}" opacity=".6"/>
+`;
 }
-export function ollieFace(mood = 'happy') {
-  return svg('-50 -50 100 100', `<circle r="48" fill="${mood === 'happy' ? '#d9f5e3' : mood === 'think' ? '#fff1c7' : '#dcecff'}"/><g transform="translate(0 6) scale(.95)">${ollieHead(mood)}</g>`, 'Ollie the otter');
+export function leoFace(mood = 'happy') {
+  return svg('-50 -50 100 100', `<circle r="48" fill="${mood === 'happy' ? '#ffe3e3' : mood === 'think' ? '#fff1c7' : '#dcecff'}"/><g transform="translate(0 3) scale(.86)">${leoHead(mood)}</g>`, 'Leo the lion cub');
 }
-// full-body Ollie. pose: 'wave' | 'point' | 'stand'
-export function ollie({ x = 0, y = 0, s = 1, mood = 'happy', pose = 'wave' } = {}) {
+// full-body Leo. pose: 'wave' | 'point' | 'stand'
+export function leo({ x = 0, y = 0, s = 1, mood = 'happy', pose = 'wave' } = {}) {
   const armR = pose === 'wave'
-    ? `${limb("M26 40 q22 -12 26 -40", OT.fur, 13)}<circle cx="52" cy="-2" r="8" fill="${OT.fur}" ${S}/>`
+    ? `${limb("M26 40 q22 -12 26 -40", LN.fur, 13)}<circle cx="52" cy="-2" r="8" fill="${LN.fur}" ${S}/>`
     : pose === 'point'
-      ? `${limb("M26 44 l36 -12", OT.fur, 13)}<circle cx="64" cy="31" r="7.5" fill="${OT.fur}" ${S}/>`
-      : `${limb("M28 44 q10 14 6 30", OT.fur, 13)}`;
+      ? `${limb("M26 44 l36 -12", LN.fur, 13)}<circle cx="64" cy="31" r="7.5" fill="${LN.fur}" ${S}/>`
+      : `${limb("M28 44 q10 14 6 30", LN.fur, 13)}`;
   return `<g transform="translate(${x} ${y}) scale(${s})">
-    <path d="M20 96 q40 10 52 -18 q-18 8 -34 4" fill="${OT.furD}" ${S}/>
-    <path d="M-30 30 q-6 60 10 72 h40 q16 -12 10 -72 z" fill="${OT.fur}" ${S}/>
-    <path d="M-17 44 q-2 40 6 52 h22 q8 -12 6 -52 q-17 -10 -34 0z" fill="${OT.belly}"/>
-    <ellipse cx="-14" cy="104" rx="13" ry="7" fill="${OT.furD}" ${S}/><ellipse cx="14" cy="104" rx="13" ry="7" fill="${OT.furD}" ${S}/>
-    ${limb("M-27 44 q-14 14 -8 30", OT.fur, 13)}
+    <path d="M22 92 q34 6 40 -26" fill="none" stroke="${INK}" stroke-width="9" stroke-linecap="round"/><path d="M22 92 q34 6 40 -26" fill="none" stroke="${LN.fur}" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M62 66 q-10 -14 2 -22 q12 6 6 20 q-2 4 -8 2z" fill="${LN.mane}" ${S} stroke-width="2.5"/>
+    <path d="M-30 30 q-6 60 10 72 h40 q16 -12 10 -72 z" fill="${LN.fur}" ${S}/>
+    <path d="M-15 52 q-2 34 6 44 h18 q8 -10 6 -44 q-15 -8 -30 0z" fill="#fde9e9"/>
+    <ellipse cx="-14" cy="104" rx="13" ry="7" fill="${LN.fur}" ${S}/><ellipse cx="14" cy="104" rx="13" ry="7" fill="${LN.fur}" ${S}/>
+    ${limb("M-27 44 q-14 14 -8 30", LN.fur, 13)}
     ${armR}
-    <g>${ollieHead(mood)}</g></g>`;
+    <path d="M-28 30 q28 16 56 0 l2 12 q-30 16 -60 0z" fill="${LN.mane}" ${S} stroke-width="2.5"/>
+    <path d="M6 40 l10 22 l8 -4 l-8 -20z" fill="${LN.mane}" ${S} stroke-width="2.5"/>
+    <g fill="#fff"><circle cx="-14" cy="38" r="2"/><circle cx="-2" cy="41" r="2"/><circle cx="12" cy="39" r="2"/><path d="M13 50 l1.2 2.4 2.6.3-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.3z"/></g>
+    <g>${leoHead(mood)}</g></g>`;
 }
-
 /* ---------------- Kids ---------------- */
 export const KIDS = {
   weiming: { name: 'Wei Ming', skin: '#f6d2b0', hair: 'short', hairC: '#2b2321', shirt: '#4aa8ff', bottom: '#2f4a7a' },
@@ -145,12 +162,12 @@ export function heroScene() {
   ${kid('weiming', { x: 166, y: 258, s: .9, pose: 'cheer' })}
   ${kid('arjun', { x: 362, y: 254, s: .92, pose: 'think', mood: 'think' })}
   ${kid('chloe', { x: 452, y: 260, s: .88, pose: 'wave', flip: true })}
-  <g class="float">${ollie({ x: 264, y: 250, s: .9, pose: 'wave' })}</g>
+  <g class="float">${leo({ x: 264, y: 246, s: .98, pose: 'wave' })}</g>
   <g font-family="Baloo 2, sans-serif" font-weight="800">
     <text x="230" y="150" font-size="34" fill="#ff6b5b">+</text><text x="330" y="150" font-size="30" fill="#7b61ff">×</text>
     <text x="20" y="110" font-size="30" fill="#0f9d94">½</text><text x="292" y="120" font-size="34" fill="#ffb000">?</text>
     <text x="455" y="150" font-size="26" fill="#4aa8ff">0.5</text>
-  </g>`, 'Pupils and Ollie the otter in a Singapore estate');
+  </g>`, 'Pupils and Leo the lion cub in a Singapore estate');
 }
 
 /* ---------------- Unit icons ---------------- */

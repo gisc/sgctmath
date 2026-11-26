@@ -1,7 +1,7 @@
 // Unit 1 · Number Sense — original content, Singapore context.
 import * as A from '../art.js';
 import { frac } from '../format.js';
-const { svg, kid, ollie } = A;
+const { svg, kid, leo } = A;
 
 const rd = d => `<span class="rd">${d}</span>`;           // a single dotted digit (raw HTML)
 const v = s => `<i>${s}</i>`;                             // italic letter for algebra
@@ -43,10 +43,10 @@ const t01 = {
       ${A.bottle(150, 40, { label: '1 L' })}
       ${kid('aisyah', { x: 70, y: 150, s: .8, pose: 'wave' })}${kid('weiming', { x: 270, y: 150, s: .8, mood: 'think', pose: 'think' })}`, 'Aisyah and Wei Ming with the bandung bottle'),
     steps: [
-      { who: 'ollie', text: 'If <b>4</b> children share 1 L, each gets 1 ÷ 4 litres. Let\'s divide step by step:', art: () => divSteps(1, 4, 6) },
+      { who: 'leo', text: 'If <b>4</b> children share 1 L, each gets 1 ÷ 4 litres. Let\'s divide step by step:', art: () => divSteps(1, 4, 6) },
       { who: 'aisyah', text: 'So 1 ÷ 4 = <b>0.25</b>. The remainder became <b>0</b>, so the division <b>stops</b>. This is a <b>terminating decimal</b>.' },
       { who: 'weiming', mood: 'think', text: 'What if only <b>3</b> children share it? Let me try 1 ÷ 3…', art: () => divSteps(1, 3, 4, 'The remainder 1 keeps coming back… it never becomes 0!') },
-      { who: 'ollie', text: 'Because the remainder 1 keeps coming back, the digit 3 repeats <b>forever</b>: 0.3333… This is a <b>recurring decimal</b>. We write it as [[r:0.(3)]]. The dot means "this digit repeats".' },
+      { who: 'leo', text: 'Because the remainder 1 keeps coming back, the digit 3 repeats <b>forever</b>: 0.3333… This is a <b>recurring decimal</b>. We write it as [[r:0.(3)]]. The dot means "this digit repeats".' },
       { who: 'chloe', text: 'When a <b>block</b> of digits repeats, put dots on the <b>first and last</b> digits of the block. 0.272727… = [[r:0.(27)]] and 0.142857142857… = [[r:0.(142857)]].' },
       { who: 'arjun', mood: 'think', text: 'Careful! In 1 ÷ 6 = 0.16666…, only the 6 repeats, so we write [[r:0.1(6)]]. Only the repeating part gets the dot.' },
     ],
@@ -113,10 +113,10 @@ const t02 = {
       ${kid('chloe', { x: 95, y: 150, s: .85, pose: 'think', mood: 'think' })}${kid('arjun', { x: 245, y: 150, s: .85, pose: 'wave' })}`, 'Chloe and Arjun holding number cards'),
     steps: [
       { who: 'chloe', mood: 'think', text: 'They look almost the same… Who wins?' },
-      { who: 'ollie', text: 'Write the recurring decimal out in full, then line up the digits by place value:',
+      { who: 'leo', text: 'Write the recurring decimal out in full, then line up the digits by place value:',
         art: () => placeTable([['[[r:0.(3)]]', ['0', '.', '3', '3', '3', '3…'], 4], ['0.33', ['0', '.', '3', '3', '0', '0'], 4]]) },
       { who: 'arjun', text: 'The ones, tenths and hundredths are the same. In the <b>thousandths</b> place, 3 &gt; 0. So [[r:0.(3)]] &gt; 0.33, and Chloe wins!' },
-      { who: 'ollie', text: 'Round 2: [[r:0.(15)]] or [[r:0.1(5)]]? Write both out:',
+      { who: 'leo', text: 'Round 2: [[r:0.(15)]] or [[r:0.1(5)]]? Write both out:',
         art: () => placeTable([['[[r:0.(15)]]', ['0', '.', '1', '5', '1', '5…'], 4], ['[[r:0.1(5)]]', ['0', '.', '1', '5', '5', '5…'], 4]]) },
       { who: 'weiming', text: 'The first difference is in the thousandths place: 1 &lt; 5. So [[r:0.(15)]] &lt; [[r:0.1(5)]].' },
       { who: 'aisyah', text: '<b>My tip:</b> write out a few more digits than the longest decimal has, then compare from the left. The first place that is different decides!' },
@@ -187,7 +187,7 @@ const t03 = {
         art: () => A.fractionCircles(4, 3, 1, { label: 'three quarters' }) },
       { who: 'weiming', text: 'I was hungry and ate 7 pieces! That\'s [[f:7/4]] of a prata.',
         art: () => A.fractionCircles(4, 7, 2, { label: 'seven quarters' }) },
-      { who: 'ollie', text: 'In [[f:7/4]], the numerator is <b>bigger than or equal to</b> the denominator. It is an <b>improper fraction</b>, which means 1 whole or more.' },
+      { who: 'leo', text: 'In [[f:7/4]], the numerator is <b>bigger than or equal to</b> the denominator. It is an <b>improper fraction</b>, which means 1 whole or more.' },
       { who: 'arjun', text: '7 quarters = 4 quarters + 3 quarters = 1 whole and [[f:3/4]]. We write this as the <b>mixed number</b> [[m:1 3/4]]. Quick way: 7 ÷ 4 = 1 remainder 3.' },
       { who: 'chloe', text: 'Going back the other way: [[m:2 1/3]]. 2 wholes = 6 thirds, plus 1 third = 7 thirds = [[f:7/3]]. Shortcut: 2 × 3 + 1 = 7.' },
     ],
@@ -259,12 +259,12 @@ const t04 = {
       <text x="170" y="44" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="18" fill="#0f9d94">KOPITIAM MENU</text>
       <text x="170" y="64" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="14" fill="${A.ink}">Kaya toast set ........ $4</text>
       ${kid('chloe', { x: 80, y: 120, s: .85, pose: 'think', mood: 'think' })}
-      ${ollie({ x: 250, y: 130, s: .72, pose: 'point' })}
-      ${A.table(20, 232, 300)}${A.kayaToast(40, 226, .7)}${A.kopi(130, 186, .7)}${A.mysteryBox(220, 162, 'n', .8)}`, 'Chloe and Ollie at a kopitiam with a mystery box labelled n'),
+      ${leo({ x: 250, y: 130, s: .72, pose: 'point' })}
+      ${A.table(20, 232, 300)}${A.kayaToast(40, 226, .7)}${A.kopi(130, 186, .7)}${A.mysteryBox(220, 162, 'n', .8)}`, 'Chloe and Leo at a kopitiam with a mystery box labelled n'),
     steps: [
       { who: 'weiming', text: '2 sets cost 2 × $4 = $8. 5 sets cost 5 × $4 = $20. Easy!' },
       { who: 'chloe', mood: 'think', text: 'But our class doesn\'t know yet how many sets we will order. How do we write the cost?' },
-      { who: 'ollie', text: 'Use a letter! Let <b>n</b> stand for the number of sets. The cost is n × 4 dollars. In maths we write this as <b>4n</b>, with the number first and no × sign.',
+      { who: 'leo', text: 'Use a letter! Let <b>n</b> stand for the number of sets. The cost is n × 4 dollars. In maths we write this as <b>4n</b>, with the number first and no × sign.',
         art: () => `<table class="tbl"><tr><th>Number of sets</th><td>1</td><td>2</td><td>3</td><td>5</td><td><i>n</i></td></tr><tr><th>Cost ($)</th><td>4</td><td>8</td><td>12</td><td>20</td><td><b>4<i>n</i></b></td></tr></table>` },
       { who: 'arjun', text: 'If we order 7 sets, put 7 in place of n: 4 × 7 = <b>$28</b>. This is called <b>substituting</b>.' },
       { who: 'aisyah', text: 'Letters can stand for other things too. If I am <i>a</i> years old and my brother is 3 years older, he is <b><i>a</i> + 3</b> years old.' },
@@ -301,7 +301,7 @@ const t04 = {
       template: `${v('m')} + ${v('m')} + ${v('m')} + ${v('m')} = {0}${v('m')} &nbsp;&nbsp;&nbsp; 5${v('k')} − 2${v('k')} = {1}${v('k')}`, blanks: [{ answer: 4, size: 'sm' }, { answer: 3, size: 'sm' }],
       hint: `5${v('k')} means 5 lots of ${v('k')}. Take away 2 lots of ${v('k')}.`,
       solution: [`4 lots of ${v('m')} = 4${v('m')}`, `5 lots of ${v('k')} − 2 lots of ${v('k')} = 3 lots of ${v('k')} = 3${v('k')}`] },
-    { id: 'g', level: 3, type: 'mcq', prompt: `Ollie makes squares in a row with ice-cream sticks. Which expression gives the number of sticks needed for ${v('n')} squares?`,
+    { id: 'g', level: 3, type: 'mcq', prompt: `Leo makes squares in a row with ice-cream sticks. Which expression gives the number of sticks needed for ${v('n')} squares?`,
       art: A.matchPattern([1, 2, 3]),
       options: [`4${v('n')}`, `3${v('n')} + 1`, `${v('n')} + 3`, `3${v('n')} + 4`], answer: 1,
       hint: 'Count the sticks: 1 square needs 4, 2 squares need 7, 3 squares need 10. How many more sticks does each new square need?',
@@ -344,7 +344,7 @@ const L1 = {
       { who: 'arjun', mood: 'think', text: 'Hmm… what if one of us slips and drops a box? Then <b>nobody</b> gets that kind of kueh!' },
       { who: 'aisyah', text: '<b>Plan B:</b> each of us carries one box with <b>4 ondeh-ondeh, 4 kueh lapis and 4 pineapple tarts</b>. That\'s exactly one family\'s share.' },
       { who: 'chloe', text: 'If one box drops in Plan B, we still lose 12 pieces, the same as Plan A. But the other two families still get <b>every</b> kind of kueh.' },
-      { who: 'ollie', text: 'That\'s called <b>spreading the risk</b>. When something might go wrong, split things up so that one accident can\'t ruin everything. In other words: don\'t put all your eggs in one basket!' },
+      { who: 'leo', text: 'That\'s called <b>spreading the risk</b>. When something might go wrong, split things up so that one accident can\'t ruin everything. In other words: don\'t put all your eggs in one basket!' },
     ],
   },
   keys: [

@@ -6,7 +6,7 @@ import { topicScore, resetTopic, resetAll } from './store.js';
 import * as A from './art.js';
 
 const main = document.getElementById('main');
-document.getElementById('brandLogo').innerHTML = A.ollieFace('happy');
+document.getElementById('brandLogo').innerHTML = A.leoFace('happy');
 
 const allTopics = UNITS.flatMap(u => u.topics.map(t => ({ ...t, unit: u })));
 const starStr = n => `${'★'.repeat(n)}<span class="off">${'★'.repeat(3 - n)}</span>`;
@@ -39,7 +39,7 @@ function renderHome() {
   <section class="hero">
     <div>
       <h1>Think like a <span>maths detective!</span></h1>
-      <p>Join Ollie the otter and friends for puzzles set around Singapore: hawker centres, the MRT and more. Every question checks your answer straight away, gives hints, and shows you how to solve it.</p>
+      <p>Join Leo the lion cub and friends for puzzles set around Singapore: hawker centres, the MRT and more. Every question checks your answer straight away, gives hints, and shows you how to solve it.</p>
       <a class="btn coral" href="#/t/${first.id}">Start with Topic 1 →</a>
       <a class="btn alt" href="#/about" style="margin-left:6px">For parents &amp; teachers</a>
     </div>
@@ -55,7 +55,7 @@ function renderHome() {
 }
 
 const WHO = {
-  ollie: m => A.ollieFace(m || 'teach'),
+  leo: m => A.leoFace(m || 'teach'),
   weiming: m => A.kidFace('weiming', m), aisyah: m => A.kidFace('aisyah', m),
   arjun: m => A.kidFace('arjun', m), chloe: m => A.kidFace('chloe', m),
 };
@@ -154,7 +154,7 @@ function renderProgress() {
   }).join('');
   const total = allTopics.filter(t => TOPICS[t.id]).reduce((a, t) => a + topicScore(TOPICS[t.id]).stars, 0);
   main.innerHTML = `<div class="card" style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-    <div style="width:120px">${A.svg('-80 -70 160 200', A.ollie({ pose: 'wave', mood: 'happy' }), 'Ollie')}</div>
+    <div style="width:120px">${A.svg('-80 -70 160 200', A.leo({ pose: 'wave', mood: 'happy' }), 'Leo')}</div>
     <div><h1 style="margin:0">My Stars</h1><p style="margin:0">You have collected <b style="font-size:26px;color:var(--teal)">${total}</b> stars so far. Keep going!</p></div></div>
     <div class="card" style="margin-top:18px;overflow-x:auto"><table class="tbl" style="width:100%"><thead><tr><th style="text-align:left">Topic</th><th>Done</th><th>Stars</th></tr></thead><tbody>${rows}</tbody></table>
     <p><button class="btn alt small" id="resetAll">Clear all my progress</button></p></div>`;

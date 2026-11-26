@@ -1,6 +1,6 @@
 import { fmt, parseNum, sameNum, norm } from './format.js';
 import { getQ, setQ } from './store.js';
-import { ollieFace } from './art.js';
+import { leoFace } from './art.js';
 
 const PRAISE = ['Well done!', 'Spot on!', 'Excellent thinking!', 'Shiok! You got it!', 'Brilliant!', 'Correct — great work!', 'Steady lah! Correct!'];
 const TRY = ['Not quite yet…', 'Almost! Have another go.', 'Hmm, check again.', 'Good try! Look at the hint.'];
@@ -184,7 +184,7 @@ export function renderQuestion(q, n, topicId, onChange) {
   function say(kind, title, html, extra = '') {
     const mood = kind === 'good' ? 'happy' : kind === 'try' ? 'think' : 'teach';
     fb.className = 'feedback show ' + kind;
-    fb.innerHTML = `<div class="fb-ico">${ollieFace(mood)}</div><div><h4>${title}</h4>${html}${extra ? `<p>${extra}</p>` : ''}</div>`;
+    fb.innerHTML = `<div class="fb-ico">${leoFace(mood)}</div><div><h4>${title}</h4>${html}${extra ? `<p>${extra}</p>` : ''}</div>`;
   }
   function resetQ() {
     locked = false; tries = 0;
