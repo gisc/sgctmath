@@ -176,7 +176,7 @@ function renderAbout() {
   <h3>Syllabus fit</h3>
   <p>Many topics go <b>beyond</b> the MOE Primary 4 syllabus on purpose, for example recurring decimals and using letters for numbers. They are enrichment ideas for curious pupils. Each topic has a short note showing how it links to school work.</p>
   <h3>Typing answers</h3>
-  <p>Answer boxes accept whole numbers, decimals (<code>0.625</code>), fractions (<code>7/4</code>) and mixed numbers (<code>1 3/4</code>). Units such as <code>cm</code> or <code>$</code> are ignored.</p>
+  <p>Answer boxes accept whole numbers, decimals (<code>0.625</code>), fractions (<code>7/4</code>) and mixed numbers (<code>1 3/4</code>). Fractions must be in their <b>simplest form</b>: an equal but unsimplified fraction such as <code>10/24</code> gets a gentle "simplify it" nudge. Units such as <code>cm</code> or <code>$</code> are ignored.</p>
   <p class="note">Spotted a mistake or have an idea? Let us know via the <a href="https://github.com/gisc/sgctmath/issues" rel="noopener">GitHub project page</a>.</p>
   </div>`;
 }

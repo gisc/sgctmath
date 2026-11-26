@@ -17,9 +17,25 @@ function h(tag, attrs = {}, html = '') {
 }
 
 // ----- checking (pure; also used by the test script) -----
+const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+// A typed fraction ("10/24", "1 6/8") must be in its simplest form.
+export function notSimplest(val) {
+  const m = String(val ?? '').trim().match(/(\d+)\s*\/\s*(\d+)\s*$/);
+  return !!m && +m[2] > 0 && gcd(+m[1], +m[2]) > 1;
+}
+// Separate numerator/denominator boxes: equal value but not reduced.
+export function unreducedPair(q, resp) {
+  const pairs = [...String(q.template || '').matchAll(/\{(?:f:|m:\d+,)(\d+),(\d+)\}/g)];
+  return pairs.some(([, a, b]) => {
+    const n = parseNum(resp[a]), d = parseNum(resp[b]);
+    const an = [].concat(q.blanks[a].answer)[0], ad = [].concat(q.blanks[b].answer)[0];
+    return Number.isInteger(n) && Number.isInteger(d) && d > 0 && n * ad === d * an && (n !== an || d !== ad);
+  });
+}
 export function checkBlank(b, val) {
   const answers = Array.isArray(b.answer) ? b.answer : [b.answer];
   if (b.kind === 'text') return answers.some(a => norm(a) === norm(val));
+  if (notSimplest(val)) return false;
   const v = parseNum(val);
   return answers.some(a => sameNum(v, typeof a === 'number' ? a : parseNum(a)));
 }
@@ -58,6 +74,7 @@ export function renderQuestion(q, n, topicId, onChange) {
   el.append(body);
   let resp;          // current response
   let tries = 0;
+  let nudged = false; // typed an equal but unsimplified fraction
   let locked = false;
 
   // ---- build interaction ----
@@ -130,7 +147,13 @@ export function renderQuestion(q, n, topicId, onChange) {
     if (locked) return;
     const r = readResp();
     if (incomplete(r)) { say('try', 'Finish first!', q.type === 'mcq' ? 'Pick an answer, then press <b>Check</b>.' : 'Fill in every answer first.'); return; }
-    if (checkQuestion(q, r)) { finish(tries === 0 ? 'first' : 'later'); return; }
+    if (checkQuestion(q, r)) { finish(tries === 0 && !nudged ? 'first' : 'later'); return; }
+    if (q.type === 'blanks' && (r.some(notSimplest) || unreducedPair(q, r))) {
+      nudged = true;
+      markWrong(r);
+      say('try', 'Nearly there!', 'Your fraction has the right value, but it is not in its <b>simplest form</b>. Divide the numerator and the denominator by a common factor, then check again.');
+      return;
+    }
     tries++;
     markWrong(r);
     if (tries >= 2) { finish('shown', true); return; }
