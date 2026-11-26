@@ -145,7 +145,7 @@ const t05 = {
       template: '{0} curry puffs', blanks: [{ answer: 2400 }],
       hint: 'Both days are boxes of 24. How many boxes were sold altogether?',
       solution: ['24 × 46 + 24 × 54 = 24 × (46 + 54)', '= 24 × 100', '= <b>2400</b> curry puffs'] },
-    { id: 'f', level: 2, type: 'blanks', prompt: 'Work out the smart way: <b>16 × 58 + 32 × 21</b>',
+    { id: 'f', level: 2, type: 'blanks', prompt: 'Volunteers are packing National Day funpacks at the community centre. <b>16</b> volunteers each pack <b>58</b> funpacks, and <b>32</b> volunteers each pack <b>21</b> funpacks. How many funpacks are packed altogether? Work it out the smart way: <b>16 × 58 + 32 × 21</b>',
       template: '16 × 58 + 32 × 21 = {0}', blanks: [{ answer: 1600 }],
       hint: '32 = 16 × 2. Can you rewrite 32 × 21 as 16 × something?',
       solution: ['32 × 21 = 16 × 2 × 21 = 16 × 42', 'So 16 × 58 + 32 × 21 = 16 × 58 + 16 × 42', '= 16 × (58 + 42) = 16 × 100', '= <b>1600</b>'] },
